@@ -1,0 +1,87 @@
+@import url('../../colors.css');
+
+.centeredView {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .modalView {
+    background-color: white;
+    position: relative;
+    border-radius: 8px;
+    padding: 30px;
+    display: flex;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 20px;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .modalTitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: var(--TEXT_COLOR);
+  }
+  
+  .modalText {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .centeredText {
+    text-align: center;
+  }
+  
+  .InspectionRulesimage {
+    width: 200px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  
+  .scrollContainer {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .scrollIndicator {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #888;
+    text-align: center;
+  }
+  
+  .modalPoint {
+    font-size: 14px;
+    margin: 5px 0;
+    color: var(--TEXT_COLOR);
+    text-align: justify;
+  }
+  
+  .button {
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+  }
+  

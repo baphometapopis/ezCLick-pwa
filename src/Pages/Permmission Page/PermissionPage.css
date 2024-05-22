@@ -1,0 +1,14 @@
+
+  
+  .permission-content {
+    max-width: 400px; /* Adjust the maximum width as needed */
+    margin: 0 auto; /* Center the content */
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 600px) {
+    .permission-content {
+      max-width: 90%; /* Adjust the maximum width for smaller screens */
+    }
+  }
+  

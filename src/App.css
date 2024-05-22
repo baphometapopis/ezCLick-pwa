@@ -1,0 +1,6 @@
+@import url('../src/colors.css');
+
+.app-container{
+    background-color:var(--BACKGROUND_COLOR);
+    height: 100vh;
+}

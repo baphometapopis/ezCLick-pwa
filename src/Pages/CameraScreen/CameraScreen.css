@@ -1,0 +1,192 @@
+.camera-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Hide scrollbar */
+    position: relative; /* Positioning context for absolute positioning */
+  }
+  
+  .camera-message {
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+  
+  .camera-button {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .camera-buttons {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .save-button-container {
+    
+    display: flex;
+
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* background-color: #007bff; */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .ok-button {
+    background-color: #007bff;
+    width: 85%;
+    text-align: center;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+
+
+  }
+  .skip-button {
+    background-color: #c21919;
+    width: 85%;
+    text-align: center;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+
+  }
+
+  
+
+  
+  .camera-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
+  
+  .captured-image {
+    width: 100vw;
+    height: 100vh;
+    /* object-fit: contain; */
+  }
+  
+  .camera-button div {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+ 
+  
+  .save-button,
+  .retake-button {
+    margin: 0 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .retake-button {
+    background-color: red; /* Example: Red color for the retake button */
+  }
+  
+  .modalText {
+    margin-bottom: 15px;
+    text-align: center;
+    background-color:black,
+
+  }
+  .instructionText{
+    color: black;
+    font-size: small;
+  }
+  .modal {
+    display:flex;
+    width: 90vw;
+    height: 90vh;
+    position: fixed;
+    top: 50%;
+    gap: 20px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* text-align: center; */
+  }
+  
+  .modal img {
+    max-width: 100%;
+    max-height: 80vh;
+  }
+
+  @media screen and (max-width: 767px)  {
+    .camera-button {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      border-radius: 10%;
+      transform: translate(-50%, -50%) rotate(90deg); /* Rotate 90 degrees for landscape */
+
+    }
+    .modal {
+        width: 80vh; /* Using vh for width in landscape orientation */
+        height: 80vw; /* Using vw for height in landscape orientation */
+        transform: translate(-50%, -50%) rotate(90deg); /* Rotate 90 degrees for landscape */
+    }
+    .save-button-container {
+    
+      display: flex;
+  
+      position: absolute;
+  
+      transform: translate(-50%, -50%) rotate(90deg); /* Rotate 90 degrees for landscape */
+
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      left: 30px;
+    bottom: 45%;
+    }
+  }
+  .capture-button-container {
+    position: absolute;
+    bottom: 20px; /* Adjust top position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  
+  .action-buttons {
+    margin-top: 10px;
+  }
+  .capture-button{
+    background-color: white;
+    height: 80px;
+    width: 80px;
+    border-radius: 50px;
+  }
