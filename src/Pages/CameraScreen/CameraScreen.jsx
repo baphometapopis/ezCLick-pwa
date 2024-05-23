@@ -403,7 +403,6 @@ const submitImage=async(data)=>{
        audio={false}
        ref={webcamRef}
        screenshotFormat="image/jpeg"
-       mirrored={true}
        height={windowSize.height}
        videoConstraints={VideoConstraints}
      />
