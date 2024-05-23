@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./InspectionCheckpoint.css";
 import { fetch_Checkpoint_inspection_question } from "../../Api/fetchQuestion";
-import { submit_inspection_checkpointData } from "../../Api/submitInspectionQuestion";
+import { submit_inspection_checkpointData, updateProposalSteps } from "../../Api/submitInspectionQuestion";
 import { fetchDataLocalStorage } from "../../Utils/LocalStorage";
 import CommonModal from "../../Component/CommonModel";
 import Header from "../../Component/Header";
@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const InspectionCheckpoint = ({ route }) => {
   const [IsInstructionModalVisible,setIsInstructionModalVisible]=useState(false)
+  const [IsVideo,setIsVideo]=useState(false)
 
 
  
@@ -44,8 +45,8 @@ export const InspectionCheckpoint = ({ route }) => {
     setIsModalOpen(false);
   };
   const InstructioncloseModal = () => {
-    // setIsInstructionModalVisible(false);
-    navigate('/Camera',{replace:true})
+    setIsInstructionModalVisible(false);
+    // navigate('/Camera',{replace:true})
   };
   const [checkpointQuestion, setCheckpointQuestion] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -108,10 +109,81 @@ export const InspectionCheckpoint = ({ route }) => {
   };
 
   // Function to handle form submission
-const goNext=()=>{
+
+  function getNextReferbackStep(data) {
+    if (data.is_referback_checkpoint === 1) {
+      setNextPath('InspectionCheckpoint')
+      return "checkpoint";
+    } else if (data.is_referback_images === 1) {
+      setNextPath('showInspectionImages')
+      return "images";
+    } else if (data.is_referback_video === 1) {
+      setNextPath('VideoRecord')
+      return "video";
+    } else {
+      // Handle the case when none of the referback points are available
+      return "No referback points available";
+    }
+  }
+  const goNext=async()=>{
+console.log(localdata,'PPppppppppppp')
+    let nextStep='images'
+
+    if(proposalInfo?.is_referback_images===0&&proposalInfo?.breakin_status===3&&proposalInfo?.is_referback_video===0)
+    {
+       nextStep='completed'
+
+
+    }  else if(proposalInfo?.is_referback_images===0&&proposalInfo?.breakin_status===3&&proposalInfo?.is_referback_video===1){
+
+      nextStep='video'
+    }
+    
+
+const data = {
+  user_id:localdata?.user_details?.id,
+  proposal_id:localdata?.proposal_data?.proposal_id,
+  breakin_steps:nextStep
+
+
+}
+    const apires = await updateProposalSteps(data)
+    if(apires){
+
+      if(nextStep==='images'){
+
 setIsInstructionModalVisible(true)
 }
+else if((nextStep==='completed')){
+  // navigate(`/proposal-info/${localdata?.proposal_data?.proposal_no}`,{replace:true})
 
+  console.log('hiotting Show Proposal Info')
+}else if((nextStep==='video')){
+  // navigate('/videoRecord',{replace:true})
+  setIsVideo(true)
+  setIsInstructionModalVisible(true)
+
+
+
+}
+
+
+}else{
+  toast.error(apires?.message, {
+    position: "bottom-right",
+    autoClose: 1000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    theme: "colored",
+  });
+
+
+
+}
+
+
+  }
   const handleSubmit = async () => {
     setIsSubmitting(true)
 
@@ -202,9 +274,8 @@ setIsSubmitting(false)
     const localdatares = await fetchDataLocalStorage('Claim_loginDetails')
     const proposalInfo = await fetchDataLocalStorage('Claim_proposalDetails')
 
-    console.log(localdatares)
     if (localdatares && proposalInfo) {
-      setLocaldata(localdatares?.user_details)
+      setLocaldata(localdatares)
       setProposalInfo(proposalInfo?.data)
     }
   }
@@ -213,7 +284,7 @@ setIsSubmitting(false)
     fetchDataFromLocalStorage()
   }, [])
 
-  useEffect(()=>{},[FailedArray,localdata])
+  useEffect(()=>{},[FailedArray,localdata,IsVideo])
   return (
     <div className="checkpointcontainer">
                       <Header checkLocal={true} /> {/* Include the Header component */}
@@ -295,6 +366,8 @@ alignItems:'center'}}>
 <InspectionModalRules
         isVisible={IsInstructionModalVisible}
         onClose={InstructioncloseModal}
+        proposalData={proposalInfo}
+        isVideo={IsVideo}
         
       />
 

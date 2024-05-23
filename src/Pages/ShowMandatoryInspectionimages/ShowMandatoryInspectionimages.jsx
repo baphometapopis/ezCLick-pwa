@@ -61,7 +61,6 @@ const ShowinspectionImages = ({ route }) => {
 
   function mapData(refData, namesData, codesData) {
 
-console.log(refData,'<<<<<<<<<<<REF DATA >>>>>>>>>>>>>>>',namesData,'<<<<<<<<<<<<<<<NAMES DATA>>>>>>>>>>>>>>>>>>',codesData,'<<<<<<<<<<<<<<<<<CODES DATA>>>>>>>>>>>>>>>')
     
     let mappedArray = [];
     
@@ -94,7 +93,6 @@ console.log(refData,'<<<<<<<<<<<REF DATA >>>>>>>>>>>>>>>',namesData,'<<<<<<<<<<<
 
 
 
-    console.log('<<<<<<<<<<<<<',reslocaldata?.proposal_data?.proposal_id,resproposalInfo,imageRes)
 
     const data ={
       proposal_id:reslocaldata?.proposal_data?.proposal_id,
@@ -111,10 +109,9 @@ console.log(refData,'<<<<<<<<<<<REF DATA >>>>>>>>>>>>>>>',namesData,'<<<<<<<<<<<
 
     let filteredimage= imageRes?.data
 if(resproposalInfo?.data?.breakin_status===3){
-  const selectedIds = [1, 2,];
+  const selectedIds = resproposalInfo?.image_ids;
 
    filteredimage=  imageRes?.data.filter(item => selectedIds.includes(item.id));
-  console.log(filteredimage,'Filtered')
 
 
 }
@@ -124,7 +121,6 @@ if(resproposalInfo?.data?.breakin_status===3){
 
 
       
-      console.log(reslocaldata,resproposalInfo,imageRes,resData)
 
       setLocaldata(reslocaldata)
       setProposalInfo(resproposalInfo)

@@ -20,11 +20,14 @@ const InspectionModalRules = ({ isVisible, onClose, proposalData, isVideo }) => 
           proposalInfo: proposalData,replace:true
         });
       } else {
-        navigate('/camera', {
-          imageData: fetchData?.data?.filter(item => item.is_mand === '1'),
-          proposalInfo: proposalData,replace:true
-        });
+
+       if(proposalData?.breakin_status==3){ 
+        navigate('/ShowInspectionImages');
+      }else{
+          navigate('/camera');
         setCameraVisible(true);
+        }
+
       }
     } else {
       setIsErrorVisible(true);

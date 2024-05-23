@@ -49,7 +49,6 @@ const VideoPreview = () => {
       type: 'video/mp4',
       name: 'video.mp4',
     };
-    console.log(LocalData)
     const data = {
       user_id: LocalData?.id??1,
       break_in_case_id: ProposalInfo?.break_in_case_id??1,

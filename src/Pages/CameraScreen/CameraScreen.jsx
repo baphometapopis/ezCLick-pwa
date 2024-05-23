@@ -27,10 +27,10 @@ const CameraScreen = () => {
   };
 
   const BackvideoConstraints = {
-    facingMode: 'user', // This will use the front camera if available
+    // facingMode: 'user', // This will use the front camera if available
 
 
-    // facingMode: { exact: "environment" }, // This will use the back camera if available
+    facingMode: { exact: "environment" }, // This will use the back camera if available
 
   };
   const [localData,setLocalData]=useState('')
@@ -403,6 +403,7 @@ const submitImage=async(data)=>{
        audio={false}
        ref={webcamRef}
        screenshotFormat="image/jpeg"
+       mirrored={true}
        height={windowSize.height}
        videoConstraints={VideoConstraints}
      />
