@@ -37,7 +37,10 @@ const VideoRecorder = () => {
 
   useEffect(() => {
     // This effect will run whenever recordedChunks state changes
+
     if (recordedChunks.length > 0 && !capturing) {
+    alert('stopped clicked',recordedChunks.length)
+
       const blob = new Blob(recordedChunks, { type: "video/webm" });
       const fileName = "video.webm";
 
@@ -80,6 +83,8 @@ const VideoRecorder = () => {
   const handleStopCaptureClick = () => {
     mediaRecorderRef.current.stop();
     setCapturing(false);
+
+    alert('stopped clicked')
   };
 
   useEffect(() => {
