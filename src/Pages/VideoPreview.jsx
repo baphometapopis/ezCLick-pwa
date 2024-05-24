@@ -59,39 +59,39 @@ const VideoPreview = () => {
     };
     console.log(data)
 
-  //   const odometerres= await submit_odometer_Reading(data)
-  //   console.log(odometerres,'odometerReading')
-  //   const res = await submit_inspection_Video(data);
-  //   if (res?.status) {
-  //   toast.dismiss();
+    const odometerres= await submit_odometer_Reading(data)
+    console.log(odometerres,'odometerReading')
+    const res = await submit_inspection_Video(data);
+    if (res?.status) {
+    toast.dismiss();
 
-  //     // navigate(`/proposal-info/${ProposalNo}`,{replace:true});
-  //     toast.success(res?.message, {
-  //       position: "bottom-right",
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       theme: "colored",
-  //     });
+      // navigate(`/proposal-info/${ProposalNo}`,{replace:true});
+      toast.success(res?.message, {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "colored",
+      });
 
-  //           navigate(`/proposal-info/${ProposalNo}`,{replace:true});
+            navigate(`/proposal-info/${ProposalNo}`,{replace:true});
 
-  //   }
-  //   else{
-  //   toast.dismiss();
+    }
+    else{
+    toast.dismiss();
 
 
-  //  toast.error(res?.message, {
-  //       position: "bottom-right",
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       theme: "colored",
-  //     });
+   toast.error(res?.message, {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "colored",
+      });
 
-  //   }
+    }
   };
 
   useEffect(() => {
