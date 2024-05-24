@@ -28,9 +28,9 @@ const VideoPreview = () => {
     const localdata = await fetchDataLocalStorage('Claim_loginDetails')
     const localproposalInfo = await fetchDataLocalStorage('Claim_proposalDetails')
 
-      console.log(localproposalInfo)
+      console.log(localdata)
     if (localdata && localproposalInfo) {
-      setLocaldata(localdata?.login_data?.user_detailss)
+      setLocaldata(localdata)
       setProposalInfo(localproposalInfo)
       setProposalNo(localproposalInfo?.data?.proposal_no)
     }
@@ -50,48 +50,48 @@ const VideoPreview = () => {
       name: 'video.mp4',
     };
     const data = {
-      user_id: LocalData?.id??1,
-      break_in_case_id: ProposalInfo?.break_in_case_id??1,
-      proposal_id: ProposalInfo?.id??1,
+      user_id: LocalData?.user_details?.id,
+      break_in_case_id: LocalData?.proposal_data?.breakin_inspection_id,
+      proposal_id: LocalData?.proposal_data?.proposal_id,
       video: videoUri,
       odometer:odometerReading,
       breakin_steps:'completed'
     };
-    console.log(videoUri,videoblob)
+    console.log(data)
 
-    const odometerres= await submit_odometer_Reading(data)
-    console.log(odometerres,'odometerReading')
-    const res = await submit_inspection_Video(data);
-    if (res?.status) {
-    toast.dismiss();
+  //   const odometerres= await submit_odometer_Reading(data)
+  //   console.log(odometerres,'odometerReading')
+  //   const res = await submit_inspection_Video(data);
+  //   if (res?.status) {
+  //   toast.dismiss();
 
-      // navigate(`/proposal-info/${ProposalNo}`,{replace:true});
-      toast.success(res?.message, {
-        position: "bottom-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        theme: "colored",
-      });
+  //     // navigate(`/proposal-info/${ProposalNo}`,{replace:true});
+  //     toast.success(res?.message, {
+  //       position: "bottom-right",
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       theme: "colored",
+  //     });
 
-            navigate(`/proposal-info/${ProposalNo}`,{replace:true});
+  //           navigate(`/proposal-info/${ProposalNo}`,{replace:true});
 
-    }
-    else{
-    toast.dismiss();
+  //   }
+  //   else{
+  //   toast.dismiss();
 
 
-   toast.error(res?.message, {
-        position: "bottom-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        theme: "colored",
-      });
+  //  toast.error(res?.message, {
+  //       position: "bottom-right",
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       theme: "colored",
+  //     });
 
-    }
+  //   }
   };
 
   useEffect(() => {
