@@ -7,8 +7,11 @@ import './PermissionPage.css'; // Import CSS file for styling
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchProposalDetails } from '../../Api/fetchProposalDetails';
+import InspectionModalRules from '../../Component/Modal/InspectionModalRules';
 const PermissionPage = () => {
   const navigate=useNavigate()
+  const [IsInstructionModalVisible,setIsInstructionModalVisible]=useState(false)
+
   const [isMobile, setIsMobile] = useState(false);
   const [cameraPermission, setCameraPermission] = useState(null);
   const [locationPermission, setLocationPermission] = useState(null);
@@ -17,7 +20,10 @@ const PermissionPage = () => {
    const [nextPath, setNextPath] = useState('InspectionCheckpoint');
 
   const [ProposalInfo, setProposalInfo] = useState([]);
-
+  const InstructioncloseModal = () => {
+    setIsInstructionModalVisible(false);
+    // navigate('/VideoRecord',{replace:true})
+  };
   useEffect(() => {
     // Check if the page is accessed on a mobile device
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -77,6 +83,19 @@ const PermissionPage = () => {
       return "No referback points available";
     }
   }
+
+  function redirectUser(data) {
+    if (data==='checkpoint') {
+      setNextPath('InspectionCheckpoint')
+    } else if (data==='images') {
+      setNextPath('camera')
+    } else if (data==='video') {
+      setNextPath('videoRecord')
+    } else {
+      // Handle the case when none of the referback points are available
+      return "No referback points available";
+    }
+  }
   const getLocalData=async()=>{
     const reslocaldata = await fetchDataLocalStorage('Claim_loginDetails')
 
@@ -129,6 +148,12 @@ const PermissionPage = () => {
 
 
       }
+
+
+      if(ProposalInfo?.data?.breakin_status===0){
+        console.log(ProposalInfo?.data?.breakin_steps,'breakinStatus is pending')
+        redirectUser(ProposalInfo?.data?.breakin_steps)
+      }
       
       
       
@@ -143,6 +168,12 @@ const PermissionPage = () => {
 
   return (
     <div className="container">
+      <InspectionModalRules
+        isVisible={IsInstructionModalVisible}
+        onClose={InstructioncloseModal}
+        isVideo={true}
+        
+      />
                             <Header checkLocal={true} /> {/* Include the Header component */}
 
       <div className="permission-content">

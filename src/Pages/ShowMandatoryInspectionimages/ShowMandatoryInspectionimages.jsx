@@ -28,7 +28,7 @@ const ShowinspectionImages = ({ route }) => {
 
   const InstructioncloseModal = () => {
     setIsInstructionModalVisible(false);
-    navigate('/VideoRecord',{replace:true})
+    // navigate('/VideoRecord',{replace:true})
   };
   const [proposalInfo,setProposalInfo]=useState()
 
