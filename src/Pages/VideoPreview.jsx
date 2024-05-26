@@ -46,8 +46,8 @@ const VideoPreview = () => {
 
     const videopath = {
       uri: videoblob,
-      type: 'video/mp4',
-      name: 'video.mp4',
+      type: 'video/webm',
+      name: 'video.webm',
     };
     const data = {
       user_id: LocalData?.user_details?.id,
