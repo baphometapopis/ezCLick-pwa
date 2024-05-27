@@ -89,23 +89,23 @@ const ShowinspectionImages = ({ route }) => {
   const fetchDataFromLocalStorage = async () => {
     const reslocaldata = await fetchDataLocalStorage('Claim_loginDetails')
     const resproposalInfo = await fetchDataLocalStorage('Claim_proposalDetails')
-    let imageRes = await fetch_Image_inspection_question();
-
-
-
-
     const data ={
       proposal_id:reslocaldata?.proposal_data?.proposal_id,
       user_id:reslocaldata?.user_details?.id,
       break_in_case_id:reslocaldata?.proposal_data?.breakin_inspection_id
     }
     
-
-    const uploadedimage = await getFullReport(data);
-
+    let imageRes = await fetch_Image_inspection_question(data);
 
 
-    if (reslocaldata && resproposalInfo && uploadedimage?.status) {
+
+
+  
+
+
+
+
+    if (reslocaldata && resproposalInfo&&imageRes?.status) {
 
     let filteredimage= imageRes?.data
 if(resproposalInfo?.data?.breakin_status===3){
@@ -117,14 +117,14 @@ if(resproposalInfo?.data?.breakin_status===3){
 }
 
 
-      const resData = mapData(referenceData,filteredimage,uploadedimage?.breakin_details)
+     
 
 
       
 
       setLocaldata(reslocaldata)
       setProposalInfo(resproposalInfo)
-      setFinalData(resData)
+      setFinalData(filteredimage)
     }
   }
 

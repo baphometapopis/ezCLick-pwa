@@ -13,8 +13,7 @@ const InspectionModalRules = ({ isVisible, onClose, proposalData, isVideo }) => 
   const openCamera = async () => {
     onClose();
 
-    const fetchData = await fetch_Image_inspection_question();
-    if (fetchData.status) {
+
       if (isVideo) {
         navigate('/VideoRecord', {
           proposalInfo: proposalData,replace:true
@@ -29,9 +28,7 @@ const InspectionModalRules = ({ isVisible, onClose, proposalData, isVideo }) => 
         }
 
       }
-    } else {
-      setIsErrorVisible(true);
-    }
+  
   };
 
   useEffect(() => { }, [isErrorVisible, isCameraVisible]);

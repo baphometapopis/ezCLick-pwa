@@ -283,15 +283,33 @@ const submitImage=async(data)=>{
       setLocalData(reslocaldata)
       setProposalInfo(ProposalInfo?.data)
     }
+const data ={
+  user_id:reslocaldata?.user_details?.id,
+  proposal_id:ProposalInfo?.data?.id,
+  break_in_case_id:ProposalInfo?.data?.breakin_inspection_id
+}
 
 
-    const imageRes = await fetch_Image_inspection_question();
+
+    const imageRes = await fetch_Image_inspection_question(data);
     if(state?.path==='RetakeImage'){
     setImages(state?.data)
       console.log(state?.data,'UUUUUUUUUUUU')
   }else{
-      setImages(imageRes.data);
+ const filteredImages=   imageRes?.data.filter(item => item.Inspection_Image === "no_image.jpg")
+    console.log(filteredImages?.length,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
+    if(filteredImages?.length===0)
+    {
+      navigation("/ShowInspectionImages", {
+        state: {
+          capturedImagesWithOverlay: allCapturedImages,
+          proposalInfo: ProposalInfo,
+        },replace:true})
+    }
+    else{
+      setImages(filteredImages);
+}
     }
   };
 

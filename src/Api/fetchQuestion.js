@@ -2,11 +2,16 @@ import {Api_Endpoints} from './ApiEndpoint';
 
 export const fetch_Image_inspection_question = async data => {
   const url = Api_Endpoints.fetch_Image_inspection_question_Endpoint;
+  var formdata = new FormData();
+  formdata.append("user_id", data?.user_id);
+  formdata.append("proposal_id", data?.proposal_id);
+  formdata.append("break_in_case_id", data?.break_in_case_id);
+
 
   try {
     const response = await fetch(url, {
-      method: 'GET',
-      //   body: formdata, // Use the FormData object directly
+      method: 'POST',
+        body: formdata, // Use the FormData object directly
     });
     if (!response.ok) {
       console.log(`API Error - HTTP Status: ${response.status}`);
@@ -25,7 +30,7 @@ export const fetch_Image_inspection_question = async data => {
       return response.status;
     }
     const datas = await response.json();
-
+console.log(datas)
     return datas;
   } catch (error) {
     throw new Error(`API Error - ${error}`);
