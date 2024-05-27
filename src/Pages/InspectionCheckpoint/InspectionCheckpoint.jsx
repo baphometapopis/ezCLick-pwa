@@ -155,9 +155,8 @@ const data = {
 setIsInstructionModalVisible(true)
 }
 else if((nextStep==='completed')){
-  // navigate(`/proposal-info/${localdata?.proposal_data?.proposal_no}`,{replace:true})
+  navigate(`/proposal-info/${localdata?.proposal_data?.proposal_no}`,{replace:true})
 
-  console.log('hiotting Show Proposal Info')
 }else if((nextStep==='video')){
   // navigate('/videoRecord',{replace:true})
   setIsVideo(true)
@@ -196,7 +195,7 @@ else if((nextStep==='completed')){
     
       const data ={
 
-        user_id:localdata?.id,
+        user_id:localdata?.user_details?.id,
 proposal_list_id:proposalInfo?.id,
 question_answer_ids:`${formattedData}`,
 product_type_id:proposalInfo?.v_product_type_id,
