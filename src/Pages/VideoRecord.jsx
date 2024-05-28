@@ -19,7 +19,7 @@ const VideoRecorder = () => {
    facingMode: { exact: "environment" }, // This will use the back camera if available
 
   };
-  const MAX_VIDEO_DURATION = 90; // Maximum video duration in seconds (1 minute and 30 seconds)
+  const MAX_VIDEO_DURATION = 30; // Maximum video duration in seconds (1 minute and 30 seconds)
   const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {

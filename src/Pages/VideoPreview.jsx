@@ -20,6 +20,8 @@ const VideoPreview = () => {
   const [deviceId, setDeviceId] = useState(null);
   const [odometerReading, setOdometerReading] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [odometerError, setOdometerError] = useState(false); // Track odometer error
 
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ const VideoPreview = () => {
   }
 
   const submitVideo = async () => {
-
+    setIsSubmitting(true)
     if (!odometerReading) {
       setOdometerError(true); // Set odometer error if reading is not provided
       return; // Stop submission if odometer reading is missing
@@ -92,6 +94,7 @@ const VideoPreview = () => {
       });
 
     }
+    setIsSubmitting(false)
   };
 
   useEffect(() => {
@@ -155,7 +158,7 @@ const VideoPreview = () => {
           <p>Video Submitted!</p>
         ) : (
           <div className="button-container">
-            <button onClick={submitVideo}>Submit</button>
+            <button onClick={submitVideo}>{isSubmitting?'Submitting':'Submit'}</button>
             <button onClick={handleRetake}>Retake</button>
           </div>
         )}

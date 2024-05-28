@@ -182,7 +182,6 @@ const skipImage=()=>{
         // Add the captured image data to the list
         setAllCapturedImages([...allCapturedImages, fileData]);
         
-        console.log(currentImageIndex,'>>>>>>>>>>>>>>>>>>>>>>>>',typeof images,'>>>>>>>>>>fileData',fileData,images.length)
         
         if(images.length === 1) {
           let data = {
