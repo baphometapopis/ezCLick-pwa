@@ -9,6 +9,7 @@ import { url } from "../../Api/ApiEndpoint";
 import { fetchLoginDataByProposalNoAPi } from "../../Api/fetchLoginDetailsByProposalNo";
 import {  storeDataLocalStorage } from "../../Utils/LocalStorage";
 import Header from "../../Component/Header";
+import DeclarationModal from "../../Component/Modal/Declaration Modal/DeclarationModal";
 
 export const ProposalInfoPage = ({ route }) => {
   
@@ -26,7 +27,22 @@ export const ProposalInfoPage = ({ route }) => {
   const [isCopied,setIscopied]=useState(false)
   const [isCopied1,setIscopied1]=useState(false)
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    console.log('File uploaded:', file);
+    // You can add more logic to handle the file upload here
+  };
+ 
   const [isCustomerCareModalVisible, setIsCustomerCareModalVisible] =
     useState(false);
   const navigate = useNavigate();
@@ -251,7 +267,9 @@ setReferbackedPoints(referbackString)
           <div className={"rowlogo"}>
             <button
               className={"customercare"}
-              onClick={toggleCustomerCareModal}
+              // onClick={toggleCustomerCareModal}
+              onClick={handleOpenModal}
+
             >
               <img src={CallIcon} alt="Call Icon" />
               <span>Call Customer Care</span>
@@ -296,6 +314,12 @@ setReferbackedPoints(referbackString)
     </div>
   </div>
 )}
+
+<DeclarationModal
+        show={isModalOpen}
+        onClose={handleCloseModal}
+        onUpload={handleFileUpload}
+      />
 
     </div>
   );

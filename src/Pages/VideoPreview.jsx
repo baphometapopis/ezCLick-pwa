@@ -8,6 +8,8 @@ import { fetchDataLocalStorage } from "../Utils/LocalStorage";
 import "./VideoPreview.css"; // Import CSS file for styling
 import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { fetchFile } from "@ffmpeg/util";
 
 const VideoPreview = () => {
   const { state } = useLocation();
@@ -21,6 +23,7 @@ const VideoPreview = () => {
   const [odometerReading, setOdometerReading] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [compressedVideoUri, setCompressedVideoUri] = useState(null);
 
   const [odometerError, setOdometerError] = useState(false); // Track odometer error
 
@@ -39,6 +42,7 @@ const VideoPreview = () => {
   }
 
   const submitVideo = async () => {
+    compressVideo()
     setIsSubmitting(true)
     if (!odometerReading) {
       setOdometerError(true); // Set odometer error if reading is not provided
@@ -77,7 +81,7 @@ const VideoPreview = () => {
         theme: "colored",
       });
 
-            navigate(`/proposal-info/${ProposalNo}`,{replace:true});
+            // navigate(`/proposal-info/${ProposalNo}`,{replace:true});
 
     }
     else{
@@ -121,6 +125,27 @@ const VideoPreview = () => {
   const handleRetake = () => {
     navigate('/VideoRecord',{replace:true});
   };
+  const compressVideo = async () => {
+    console.log('[clicked compresor ',videoUri)
+    const ffmpeg = new FFmpeg({ log: true });
+    await ffmpeg.load();
+    await ffmpeg.writeFile('input.webm', await fetchFile(videoUri));
+    await ffmpeg.exec(['-i', 'input.webm', '-vcodec', 'libvpx', '-crf', '28', '-b:v', '1M', 'output.webm']);
+    const inputData = await fetchFile(videoUri);
+    const compressedData = await ffmpeg.readFile('output.webm');
+    const inputFileSize = inputData.size;
+    const compressedFileSize = compressedData.size;
+    const compressedVideoUrl = URL.createObjectURL(new Blob([compressedData.buffer], { type: 'video/webm' }));
+    console.log('Input file size:', inputFileSize, 'bytes');
+    console.log('Compressed file size:', compressedFileSize, 'bytes');
+    setCompressedVideoUri(compressedVideoUrl);
+  };
+  
+
+  useEffect(() => {
+   
+    compressVideo();
+  }, [videoUri]); 
 
   useEffect(() => {
     fetchDataFromLocalStorage();

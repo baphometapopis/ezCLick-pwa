@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../Component/Header";
+import SignaturePadComponent from "../../Component/SignaturePadComponent";
 import { Search2 } from "../../Constant/ImageConstant";
 import "./home.css"; // Import CSS file
 
@@ -54,6 +55,7 @@ const HomePage = () => {
           onClick={handleSearchSubmit} // Handle search submission on click
         />
       </div>
+      <SignaturePadComponent/>
     </div>
   );
 };
