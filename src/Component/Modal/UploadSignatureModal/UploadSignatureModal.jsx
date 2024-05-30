@@ -82,8 +82,8 @@ const UploadSignatureModal = ({ show, onClose }) => {
 
   useEffect(() => {}, [uploadedImage]);
   const videoConstraints = {
-    width: 280,
-    height: 120,
+    width: 120,
+    height: 280,
     facingMode: { exact: "environment" }, // This will use the back camera if available
 
   };
