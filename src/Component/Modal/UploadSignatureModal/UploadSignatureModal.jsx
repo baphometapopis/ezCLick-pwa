@@ -81,10 +81,9 @@ const UploadSignatureModal = ({ show, onClose }) => {
   };
 
   useEffect(() => {}, [uploadedImage]);
-  const BackvideoConstraints = {
-    // facingMode: 'user', // This will use the front camera if available
-
-
+  const videoConstraints = {
+    width: 280,
+    height: 120,
     facingMode: { exact: "environment" }, // This will use the back camera if available
 
   };
@@ -109,9 +108,7 @@ const UploadSignatureModal = ({ show, onClose }) => {
                   audio={false}
                   ref={webcamRef}
                   screenshotFormat="image/jpeg"
-                  width="100%"
-               
-                videoConstraints={BackvideoConstraints} // This will use the back camera if available
+                    videoConstraints={videoConstraints}
 
                 />
                 <button onClick={handleCapture}>Capture</button>
