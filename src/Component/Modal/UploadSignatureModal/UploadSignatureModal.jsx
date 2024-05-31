@@ -1,8 +1,7 @@
-// UploadSignatureModal.js
-import React, { useEffect, useState, useRef } from 'react';
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import Cropper from 'react-easy-crop';
 import Webcam from 'react-webcam';
+import SignaturePadComponent from '../../SignaturePadComponent';
 import './UploadSignatureModal.css';
 
 const UploadSignatureModal = ({ show, onClose }) => {
@@ -10,9 +9,10 @@ const UploadSignatureModal = ({ show, onClose }) => {
   const [useSketchpad, setUseSketchpad] = useState(false);
   const [useCamera, setUseCamera] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [crop, setCrop] = useState({ aspect: 1 });
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
-  const [imageRef, setImageRef] = useState(null);
   const webcamRef = useRef(null);
 
   const handleFileUpload = (event) => {
@@ -32,24 +32,31 @@ const UploadSignatureModal = ({ show, onClose }) => {
     setUseCamera(false);
   };
 
-  const handleCropComplete = (crop) => {
-    makeClientCrop(crop);
-  };
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
 
-  const makeClientCrop = async (crop) => {
-    if (imageRef && crop.width && crop.height) {
-      const croppedImageUrl = await getCroppedImg(imageRef, crop, 'newFile.jpeg');
-      setCroppedImage(croppedImageUrl);
+  const generateCroppedImage = async () => {
+    try {
+      const croppedImage = await getCroppedImg(uploadedImage, croppedAreaPixels);
+      setUploadedImage(null);
+      setCroppedImage(croppedImage);
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  const getCroppedImg = (image, crop, fileName) => {
+  const getCroppedImg = (imageSrc, crop) => {
+    const image = new Image();
+    image.src = imageSrc;
     const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
+
     canvas.width = crop.width;
     canvas.height = crop.height;
-    const ctx = canvas.getContext('2d');
 
     ctx.drawImage(
       image,
@@ -63,30 +70,41 @@ const UploadSignatureModal = ({ show, onClose }) => {
       crop.height
     );
 
-    return new Promise((resolve, reject) => {
-      canvas.toBlob(blob => {
-        if (!blob) {
-          console.error('Canvas is empty');
-          return;
-        }
-        blob.name = fileName;
-        const fileUrl = window.URL.createObjectURL(blob);
-        resolve(fileUrl);
-      }, 'image/jpeg');
+    return new Promise((resolve) => {
+      const base64Image = canvas.toDataURL('image/jpeg');
+      resolve(base64Image);
     });
   };
 
-  const onImageLoaded = (image) => {
-    setImageRef(image);
+  const clearState = () => {
+    setManualUpload(false);
+    setUseSketchpad(false);
+    setUseCamera(false);
+    setUploadedImage(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setCroppedAreaPixels(null);
+    setCroppedImage(null);
   };
 
-  useEffect(() => {}, [uploadedImage]);
+  useEffect(() => {
+    return () => {
+      clearState();
+    };
+  }, []);
+
+  const handleClose = () => {
+    clearState();
+    onClose();
+  };
+
   const videoConstraints = {
-    width: 120,
-    height: 280,
+    // facingMode: 'user',
     facingMode: { exact: "environment" }, // This will use the back camera if available
-
+    width: 300,
+    height: 120
   };
+
   if (!show) {
     return null;
   }
@@ -94,52 +112,67 @@ const UploadSignatureModal = ({ show, onClose }) => {
   return (
     <div className="upload-signature-modal-backdrop">
       <div className="upload-signature-modal-content">
-        <button className="upload-signature-modal-close" onClick={onClose}>
+        <button className="upload-signature-modal-close" onClick={handleClose}>
           X
         </button>
         <h2>Upload Signature</h2>
         {manualUpload ? (
-          <>
+          <div style={{ display: 'flex' }}>
             <button onClick={() => setUseCamera(true)}>Open Camera</button>
-            <input type="file" accept="image/*" onChange={handleFileUpload} />
-            {useCamera && (
-              <div className="webcam-container">
-                <Webcam
-                  audio={false}
-                  ref={webcamRef}
-                  screenshotFormat="image/jpeg"
-                    videoConstraints={videoConstraints}
-
-                />
-                <button onClick={handleCapture}>Capture</button>
-              </div>
-            )}
-          </>
+            <input style={{ width: '85%' }} type="file" accept="image/*" onChange={handleFileUpload} />
+          </div>
         ) : useSketchpad ? (
-          <div>Sketchpad (Implementation depends on chosen library)</div>
-        ) : (
+          <div>
+
+<div >
+  <SignaturePadComponent />
+</div>
+
+          </div>
+          ) : (
           <>
             <button onClick={() => setManualUpload(true)}>Manual Upload</button>
             <button onClick={() => setUseSketchpad(true)}>Use Sketchpad</button>
           </>
         )}
 
+        {useCamera && (
+          <div className="webcam-container">
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+            />
+            <button style={{ marginTop: '20px' }} onClick={handleCapture}>Capture</button>
+          </div>
+        )}
+
         {uploadedImage && (
           <>
-            <ReactCrop
-              src={uploadedImage}
-              crop={crop}
-              onImageLoaded={onImageLoaded}
-              onChange={(newCrop) => setCrop(newCrop)}
-              onComplete={handleCropComplete}
-            />
-            {uploadedImage && (
-              <div>
-                <h3>Cropped Image</h3>
-                <img src={uploadedImage} alt="Cropped" />
-              </div>
-            )}
+            <div className="crop-container">
+              <Cropper
+                image={uploadedImage}
+                crop={crop}
+                zoom={zoom}
+                aspect={300 / 120}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </div>
+            <div>
+              <button style={{ position: 'relative', top: '150px' }} onClick={generateCroppedImage}>Crop Image</button>
+            </div>
           </>
+        )}
+
+        {croppedImage && (
+          <div>
+            <h3>Cropped Image</h3>
+            <img src={croppedImage} alt="Cropped" style={{ height: '120px', width: '280px' }} />
+            <button>Upload Signature</button>
+          </div>
         )}
       </div>
     </div>

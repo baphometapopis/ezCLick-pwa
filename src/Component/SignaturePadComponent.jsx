@@ -14,8 +14,12 @@ const SignaturePadComponent = () => {
   };
 
   return (
-    <div>
-      <SignaturePad ref={signaturePadRef} options={{ penColor: 'blue' ,    backgroundColor: 'white', }} />
+    <div >
+      <div style={{border: '2px solid black', padding: '10px' ,margin:'10px' }}>
+    
+
+      <SignaturePad ref={signaturePadRef} options={{ penColor: 'blue' ,    backgroundColor: 'white', }} redrawOnResize={true} />
+      </div>
       <button onClick={clearSignature}>Clear</button>
       <button onClick={saveSignature}>Save</button>
     </div>
