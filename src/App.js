@@ -17,6 +17,7 @@ import Header from "./Component/Header";
 import PermissionPage from "./Pages/Permmission Page/PermissionPage";
 import ImageWithFooter from "./Pages/CameraScreen/ImageWithFooter";
 import { useEffect } from "react";
+import OtpScreen from "./Pages/OTp Screen/OtpScreen";
 
 function App() {
 
@@ -49,6 +50,8 @@ function App() {
           element={<ImageWithFooter />}
         />
         <Route path="/camera" element={<CameraScreen />} />
+        <Route path="/otpScreen" element={<OtpScreen />} />
+
         <Route
           path="/ShowInspectionImages"
           element={<ShowinspectionImages />}

@@ -25,4 +25,8 @@ export const Api_Endpoints = {
 
   fetchProposalDetailsEndpoint: `${url}api/get_proposal_details`,
   fetchLoginDetailsByProposalNoEndpoint: `${url}api/get_proposal_user_details`,
+  upload_signature_endpoint:`${url}api/uploadCustomerSignature`,
+  sendOTP:`${url}api/SendOtpCustomer`,
+  VerifyOTP:`${url}api/VerifyOtp`,
+
 };

@@ -65,6 +65,10 @@ import Magma from "../Assets/IC_Logo/Magma1.png";
 import Success from "../Assets/Images/Sucess.png";
 import CarIcon from "../Assets/Images/carIcon.png";
 
+import EmailVerification from "../Assets/Images/emailVerifcation.jpeg";
+import OtpImage from "../Assets/Images/otpImage.jpeg";
+
+
 import CustomerCare from "../Assets/Icons/customercare.png";
 import WhatsappIcon from "../Assets/Icons/whatsappIcon.png";
 
@@ -72,6 +76,7 @@ import WhatsappIcon from "../Assets/Icons/whatsappIcon.png";
 
 
 export {CarIcon,
+  
   RejectedIcon,
   PlaceholderImage,
   SampleImage,
@@ -127,6 +132,8 @@ export {CarIcon,
   Search2,
   Success,
   CustomerCare,
-  WhatsappIcon
+  WhatsappIcon,
+  EmailVerification,
+  OtpImage
 };
 

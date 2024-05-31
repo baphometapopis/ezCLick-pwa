@@ -39,7 +39,6 @@ export const ProposalInfoPage = ({ route }) => {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    console.log('File uploaded:', file);
     // You can add more logic to handle the file upload here
   };
  
@@ -60,7 +59,6 @@ const handleCopy1 = (phoneNumber) => {
 
     try {
       const getData = await fetchProposalDetails(proposalNumber);
-      console.log(getData)
       if (getData.status) {
         setProposalInfo(getData?.data);
         setAdminComments(getData?.admin_comment)
@@ -267,8 +265,10 @@ setReferbackedPoints(referbackString)
           <div className={"rowlogo"}>
             <button
               className={"customercare"}
-              // onClick={toggleCustomerCareModal}
-              onClick={handleOpenModal}
+              onClick={toggleCustomerCareModal}
+              // onClick={handleOpenModal}
+
+              // onClick={()=>navigate('/otpScreen',{state:{email:'bharath@gmail.com'}})}
 
             >
               <img src={CallIcon} alt="Call Icon" />
@@ -276,7 +276,7 @@ setReferbackedPoints(referbackString)
             </button>
             {(proposalStatusData === "Pending" ||
               proposalStatusData ===
-                "Referback") && (
+                "Referback") && (proposalInfo?.is_otp_verify===1 && proposalInfo?.is_declaration_accepted===1)   && 
               <button
                 className={"StartInspection"}
                 onClick={() =>     navigate('/CheckPermission')}
@@ -284,7 +284,25 @@ setReferbackedPoints(referbackString)
                 <img src={StartInspection} alt="Start Inspection Icon" />
                 <span>Start Inspection</span>
               </button>
+            }
+ {((proposalInfo?.is_otp_verify===0 && proposalInfo?.is_declaration_accepted===0)  ) && (
+              <button
+                className={"StartInspection"}
+              onClick={()=>navigate('/otpScreen',{state:{proposaldata:proposalInfo}})}
+              >
+                <img src={StartInspection} alt="Start Inspection Icon" />
+                <span>Verify</span>
+              </button>
             )}
+             {((proposalInfo?.is_otp_verify===1 && proposalInfo?.is_declaration_accepted===0)  ) && (
+              <button
+                className={"StartInspection"}
+onClick={handleOpenModal}              >
+                <img src={StartInspection} alt="Accept Declaration" />
+                <span>Declaration</span>
+              </button>
+            )}
+
           </div>
         </div>
       ) : (
@@ -319,6 +337,7 @@ setReferbackedPoints(referbackString)
         show={isModalOpen}
         onClose={handleCloseModal}
         onUpload={handleFileUpload}
+        data={proposalInfo}
       />
 
     </div>

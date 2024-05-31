@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Cropper from 'react-easy-crop';
 import Webcam from 'react-webcam';
+import { uploadSignature } from '../../../Api/uploadSignature';
 import SignaturePadComponent from '../../SignaturePadComponent';
 import './UploadSignatureModal.css';
-
-const UploadSignatureModal = ({ show, onClose }) => {
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+const UploadSignatureModal = ({ show, onClose ,data}) => {
   const [manualUpload, setManualUpload] = useState(false);
   const [useSketchpad, setUseSketchpad] = useState(false);
   const [useCamera, setUseCamera] = useState(false);
@@ -14,6 +16,9 @@ const UploadSignatureModal = ({ show, onClose }) => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
   const webcamRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [uploadedSigmnature,setUploadedSignature]=useState(false)
+
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -25,6 +30,7 @@ const UploadSignatureModal = ({ show, onClose }) => {
       reader.readAsDataURL(file);
     }
   };
+
 
   const handleCapture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -101,9 +107,49 @@ const UploadSignatureModal = ({ show, onClose }) => {
   const videoConstraints = {
     // facingMode: 'user',
     facingMode: { exact: "environment" }, // This will use the back camera if available
-    width: 300,
-    height: 120
+    width: 120,
+    height: 300
   };
+
+  const getSignature=(image)=>{
+    setCroppedImage(image)
+  }
+
+const handleSignatureUpload=async()=>{
+
+
+  const res = await uploadSignature(data?.id,croppedImage)
+  console.log(res?.status,'Upload Signature')
+
+  if(res?.status){
+
+    toast.success(res?.message, {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      theme: "colored",
+    });
+
+    window.location.reload();
+
+  }else{
+    toast.error(res?.message, {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      theme: "colored",
+    });
+
+
+  }
+
+}
+useEffect(()=>{},[uploadedSigmnature])
+
 
   if (!show) {
     return null;
@@ -116,16 +162,20 @@ const UploadSignatureModal = ({ show, onClose }) => {
           X
         </button>
         <h2>Upload Signature</h2>
+        <p>Please upload or draw the correct signature. It will be verified during the claim process.</p>
+
         {manualUpload ? (
           <div style={{ display: 'flex' }}>
             <button onClick={() => setUseCamera(true)}>Open Camera</button>
-            <input style={{ width: '85%' }} type="file" accept="image/*" onChange={handleFileUpload} />
+            <input style={{ width: '85%' }} type="file" accept="image/*"                           onClick={(e) => (e.target.value = null)} // This will reset the input file
+
+          onChange={handleFileUpload} />
           </div>
         ) : useSketchpad ? (
           <div>
 
 <div >
-  <SignaturePadComponent />
+  <SignaturePadComponent  getSignature={getSignature}/>
 </div>
 
           </div>
@@ -149,7 +199,7 @@ const UploadSignatureModal = ({ show, onClose }) => {
         )}
 
         {uploadedImage && (
-          <>
+          <div style={{backgroundColor:'white'}}>
             <div className="crop-container">
               <Cropper
                 image={uploadedImage}
@@ -162,16 +212,23 @@ const UploadSignatureModal = ({ show, onClose }) => {
               />
             </div>
             <div>
-              <button style={{ position: 'relative', top: '150px' }} onClick={generateCroppedImage}>Crop Image</button>
+              <button  onClick={generateCroppedImage}>Crop Image</button>
             </div>
-          </>
+
+          </div>
         )}
 
         {croppedImage && (
           <div>
-            <h3>Cropped Image</h3>
+            <h3>Signature</h3>
             <img src={croppedImage} alt="Cropped" style={{ height: '120px', width: '280px' }} />
-            <button>Upload Signature</button>
+            {
+                 !uploadedSigmnature?
+              <button onClick={handleSignatureUpload}>Upload Signature</button>:
+              <button onClick={handleSignatureUpload}>Done</button>
+
+              
+            }
           </div>
         )}
       </div>

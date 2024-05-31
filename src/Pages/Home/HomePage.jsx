@@ -55,7 +55,7 @@ const HomePage = () => {
           onClick={handleSearchSubmit} // Handle search submission on click
         />
       </div>
-      <SignaturePadComponent/>
+      {/* <SignaturePadComponent/> */}
     </div>
   );
 };

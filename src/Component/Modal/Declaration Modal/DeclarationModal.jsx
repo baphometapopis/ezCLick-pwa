@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import UploadSignatureModal from '../UploadSignatureModal/UploadSignatureModal';
 import './Declaration.css';
 
-const DeclarationModal = ({ show, onClose, onUpload }) => {
+const DeclarationModal = ({ show, onClose, onUpload ,data}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!show) {
@@ -42,6 +42,7 @@ const DeclarationModal = ({ show, onClose, onUpload }) => {
       <UploadSignatureModal
         show={isModalOpen}
         onClose={handleCloseModal}
+        data={data}
       />
     </div>
   );
