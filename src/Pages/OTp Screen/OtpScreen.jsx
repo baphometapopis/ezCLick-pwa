@@ -146,18 +146,21 @@ const OtpScreen = () => {
           <img src={OtpImage} style={{ height: '120px', width: '150px' }} alt="OTP Verification" />
           <h2>Enter OTP</h2>
           <div className="otp-boxes">
-            {otpBoxes.map((box, index) => (
-              <input
-                key={index}
-                type="text"
-                value={box}
-                maxLength={1}
-                ref={el => inputRefs.current[index] = el}
-                onChange={(e) => handleOtpChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                className={box ? 'otp-box filled' : 'otp-box'}
-              />
-            ))}
+          {otpBoxes.map((box, index) => (
+  <input
+    key={index}
+    type="text"
+    value={box}
+    maxLength={1}
+    ref={el => inputRefs.current[index] = el}
+    onChange={(e) => handleOtpChange(index, e.target.value)}
+    onKeyDown={(e) => handleKeyDown(index, e)}
+    className={box ? 'otp-box filled' : 'otp-box'}
+    inputmode="numeric"
+    pattern="[0-9]*"
+  />
+))}
+
           </div>
           <button onClick={handleOtpSubmit} className="submit-btn">Submit OTP</button>
         </div>
