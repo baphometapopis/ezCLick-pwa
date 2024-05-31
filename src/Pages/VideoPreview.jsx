@@ -81,7 +81,7 @@ const VideoPreview = () => {
         theme: "colored",
       });
 
-            // navigate(`/proposal-info/${ProposalNo}`,{replace:true});
+            navigate(`/proposal-info/${ProposalNo}`,{replace:true});
 
     }
     else{
