@@ -244,6 +244,8 @@ const submitImage=async(data)=>{
             'From Submit Function',
           );
           
+          toast.info("Uploading Image...", { autoClose: false });
+
           if(submittedresponse?.status){
           setCurrentImageIndex(currentImageIndex + 1);
 
@@ -255,6 +257,8 @@ const submitImage=async(data)=>{
               pauseOnHover: true,
               theme: "colored",
             });
+            toast.dismiss()
+
             return true
           }else{
             toast.error(submittedresponse?.message, {
@@ -265,6 +269,8 @@ const submitImage=async(data)=>{
               pauseOnHover: true,
               theme: "colored",
             });
+            toast.dismiss()
+
             return false
 
           }
