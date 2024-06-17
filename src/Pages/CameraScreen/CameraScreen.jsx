@@ -13,32 +13,43 @@ import { submit_inspection_Images } from "../../Api/submitInspectionQuestion";
 import { extractBase64FromDataURI } from "../../Utils/convertImageToBase64";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 const CameraScreen = () => {
   const { state } = useLocation();
-  console.log('>>>>>>>>>>>>>', state)
+  console.log('>>>>>>>>>>>>>',state)
 
   const canvasRef = useRef(null);
 
+
   const FrontvideoConstraints = {
     facingMode: 'user', // This will use the front camera if available
+
+
   };
 
   const BackvideoConstraints = {
-    facingMode: { exact: "environment" }, // This will use the back camera if available
-  };
+    // facingMode: 'user', // This will use the front camera if available
 
-  const [localData, setLocalData] = useState('');
+
+    facingMode: { exact: "environment" }, // This will use the back camera if available
+
+  };
+  const [localData,setLocalData]=useState('')
+
+
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
   const [latitude, setLatitude] = useState(null);
   const [CanvaImageData, setCanvaImageData] = useState('');
+
+
   const [longitude, setLongitude] = useState(null);
   const [images, setImages] = useState([]);
   const [ProposalInfo, setProposalInfo] = useState([]);
   const [VideoConstraints, setVideoConstraints] = useState(BackvideoConstraints);
+
+
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [capturedImage, setCapturedImage] = useState(null);
   const [allCapturedImages, setAllCapturedImages] = useState([]);
@@ -46,29 +57,38 @@ const CameraScreen = () => {
   const navigation = useNavigate();
   const webcamRef = useRef(null);
 
-  const skipImage = () => {
-    if (currentImageIndex < images.length - 1) {
-      setCurrentImageIndex(currentImageIndex + 1);
-      setCapturedImage(null);
-      setIsModalOpen(true);
-    } else {
-      navigation("/ShowInspectionImages", {
-        state: {
-          capturedImagesWithOverlay: allCapturedImages,
-          proposalInfo: ProposalInfo,
-        },
-      });
-    }
-  };
+  
+
+const skipImage=()=>{
+  if (currentImageIndex < images.length - 1) {
+    setCurrentImageIndex(currentImageIndex + 1);
+    setCapturedImage(null);
+    setIsModalOpen(true);
+  } else {
+    navigation("/ShowInspectionImages", {
+      state: {
+        capturedImagesWithOverlay: allCapturedImages,
+        proposalInfo: ProposalInfo,
+      },
+    });
+  }
+
+}
 
   const handleRetakePhoto = () => {
     setCapturedImage(null);
   };
-
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
+
+
+
   };
+
+
+  
+  
 
   const handleSavePhoto = async () => {
     const canvas = canvasRef.current;
@@ -162,7 +182,8 @@ const CameraScreen = () => {
         // Add the captured image data to the list
         setAllCapturedImages([...allCapturedImages, fileData]);
         
-        if (images.length === 1) {
+        
+        if(images.length === 1) {
           let data = {
             break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
             question_id: images[currentImageIndex]?.id,
@@ -174,7 +195,7 @@ const CameraScreen = () => {
           
           const response = await submitImage(data);
 
-          if (response?.status) {
+          if(response?.status){
             navigation("/ShowInspectionImages", {
               state: {
                 capturedImagesWithOverlay: allCapturedImages,
@@ -196,10 +217,11 @@ const CameraScreen = () => {
               breakin_steps: 'images'
             };
             
-            const submissionResult = await submitImage(data);
-            if (submissionResult?.status) {
-              setCurrentImageIndex(currentImageIndex + 1);
-            }
+            const submitimgres=await submitImage(data);
+            if(submitimgres){
+
+          setCurrentImageIndex(currentImageIndex + 1);
+}
           } else {
             // Navigate to the next screen if all images are captured
             navigation("/ShowInspectionImages", {
@@ -218,72 +240,92 @@ const CameraScreen = () => {
     };
     logo.src = Logo1;
   };
+  
 
-  const submitImage = async (data) => {
-    const submittedresponse = await submit_inspection_Images(data, 'From Submit Function');
-    
-    toast.info("Uploading Image...", { autoClose: false });
+const submitImage=async(data)=>{
+          const submittedresponse = await submit_inspection_Images(
+            data,
+            'From Submit Function',
+          );
+          
+          toast.info("Uploading Image...", { autoClose: false });
 
-    if (submittedresponse?.status) {
-      toast.success(submittedresponse?.message, {
-        position: "bottom-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        theme: "colored",
-      });
-      toast.dismiss();
-      return true;
-    } else {
-      toast.error(submittedresponse?.message, {
-        position: "bottom-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        theme: "colored",
-      });
-      toast.dismiss();
-      return false;
-    }
-  };
+          if(submittedresponse?.status){
+
+            toast.success(submittedresponse?.message, {
+              position: "bottom-right",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "colored",
+            });
+            toast.dismiss()
+
+            return true
+          }else{
+            toast.error(submittedresponse?.message, {
+              position: "bottom-right",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "colored",
+            });
+            toast.dismiss()
+
+            return false
+
+          }
+}
+
+
+  
 
   const fetchInspectionImages = async () => {
-    const reslocaldata = await fetchDataLocalStorage('Claim_loginDetails');
-    const ProposalInfo = await fetchDataLocalStorage('Claim_proposalDetails');
+    const reslocaldata = await fetchDataLocalStorage('Claim_loginDetails')
+
+    const ProposalInfo = await fetchDataLocalStorage('Claim_proposalDetails')
     
     if (reslocaldata && ProposalInfo) {
-      setLocalData(reslocaldata);
-      setProposalInfo(ProposalInfo?.data);
+      setLocalData(reslocaldata)
+      setProposalInfo(ProposalInfo?.data)
     }
+const data ={
+  user_id:reslocaldata?.user_details?.id,
+  proposal_id:ProposalInfo?.data?.id,
+  break_in_case_id:ProposalInfo?.data?.breakin_inspection_id
+}
 
-    const data = {
-      user_id: reslocaldata?.user_details?.id,
-      proposal_id: ProposalInfo?.data?.id,
-      break_in_case_id: ProposalInfo?.data?.breakin_inspection_id
-    };
+
 
     const imageRes = await fetch_Image_inspection_question(data);
-    if (state?.path === 'RetakeImage') {
-      setImages(state?.data);
-    } else {
-      const filteredImages = imageRes?.data.filter(item => item.Inspection_Image === "no_image.jpg");
-      if (filteredImages?.length === 0) {
-        navigation("/ShowInspectionImages", {
-          state: {
-            capturedImagesWithOverlay: allCapturedImages,
-            proposalInfo: ProposalInfo,
-          },
-          replace: true
-        });
-      } else {
-        setImages(filteredImages);
-      }
+    if(state?.path==='RetakeImage'){
+    setImages(state?.data)
+      console.log(state?.data,'UUUUUUUUUUUU')
+  }else{
+ const filteredImages=   imageRes?.data.filter(item => item.Inspection_Image === "no_image.jpg")
+    console.log(filteredImages?.length,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+
+    if(filteredImages?.length===0)
+    {
+      navigation("/ShowInspectionImages", {
+        state: {
+          capturedImagesWithOverlay: allCapturedImages,
+          proposalInfo: ProposalInfo,
+        },replace:true})
+    }
+    else{
+      setImages(filteredImages);
+}
     }
   };
 
   useEffect(() => {
+    // Get device ID
+    const id = navigator.userAgent;
+
+    // Get user's current position
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -297,9 +339,11 @@ const CameraScreen = () => {
     } else {
       console.error("Geolocation not supported");
     }
+    
   }, []);
 
   useEffect(() => {
+
     const handleResize = () => {
       setWindowSize({
         width: window.innerWidth,
@@ -307,39 +351,45 @@ const CameraScreen = () => {
       });
     };
 
+    // Add event listener to window resize event
     window.addEventListener("resize", handleResize);
+
+    // Remove event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, []); // Empty dependency array ensures that effect only runs on mount and unmount
 
   useEffect(() => {
-    console.log(images, 'IIIIIOOOOOOOOOOOOOOO');
-  }, [isModalOpen, images, ProposalInfo, VideoConstraints, localData]);
+    console.log(images,'IIIIIOOOOOOOOOOOOOOO')
+  }, [isModalOpen, images,ProposalInfo,VideoConstraints,localData]);
 
-  useEffect(() => {
-    if (images[currentImageIndex]?.id == 17) {
-      setVideoConstraints(FrontvideoConstraints);
+  useEffect(()=>{
+    if(images[currentImageIndex]?.id==17)
+    {
+      setVideoConstraints(FrontvideoConstraints)
     }
-  }, [images, currentImageIndex]);
-
+},[])
   useEffect(() => {
     fetchInspectionImages();
   }, []);
-
-  useEffect(() => {}, [CanvaImageData]);
-
+  useEffect(()=>{},[CanvaImageData])
   return (
     <div className="camera-container">
       {isModalOpen && (
         <div className="modal">
           <div style={{ flex: 0.4 }}>
             <img
-              src={images[currentImageIndex]?.sample_image_url ? images[currentImageIndex]?.sample_image_url : PlaceholderImage}
+              src={images[currentImageIndex]?.sample_image_url?images[currentImageIndex]?.sample_image_url:PlaceholderImage}
               alt={images[currentImageIndex]?.name}
               style={{ width: "100%", height: "80%" }}
             />
             <p className="modalText">{images[currentImageIndex]?.name}</p>
+            {/* <p className="modalText">{images[currentImageIndex]?.is_mand}</p> */}
+
+            {/* <p className="modalText">
+              {currentImageIndex + 1}/{images.length}
+            </p> */}
           </div>
           <div style={{ flex: 0.6 }}>
             <h5 className="modalText">
@@ -362,44 +412,46 @@ const CameraScreen = () => {
             <p className="instructionText">
               {"\u2022"} Click on Ok When Your are Ready
             </p>
-            <div style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-              <div onClick={() => setIsModalOpen(false)} className="ok-button">
-                Start Camera
-              </div>
-              {images[currentImageIndex]?.is_mand == 0 ? <div onClick={skipImage} className="skip-button">
-                Skip
-              </div> : null}
+            <div style={{display:'flex',flexDirection:'row',gap:10}}>
+            <div onClick={() => setIsModalOpen(false)} className="ok-button">
+              Start Camera
+            </div>
+          {images[currentImageIndex]?.is_mand==0 ?  <div onClick={skipImage} className="skip-button">
+              Skip
+            </div>:null}
             </div>
           </div>
         </div>
       )}
       {!isModalOpen && !capturedImage && (
-        <div style={{ position: 'relative' }}>
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            height={windowSize.height}
-            videoConstraints={VideoConstraints}
-          />
-          <img
-            src={images[currentImageIndex]?.sample_image_url}
-            alt="Overlay"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              height: '150px',
-              width: '150px',
-              transform: 'translate(-50%, -50%) rotate(90deg)',
-              opacity: 0.5,
-              zIndex: 4,
-            }}
-          />
-          <div className="capture-button-container">
-            <div onClick={capture} className="capture-button"></div>
-          </div>
-        </div>
+     <div style={{ position: 'relative' }}>
+     <Webcam
+       audio={false}
+       ref={webcamRef}
+       screenshotFormat="image/jpeg"
+       height={windowSize.height}
+       videoConstraints={VideoConstraints}
+     />
+     <img
+       src={images[currentImageIndex]?.sample_image_url}
+       alt="Overlay"
+       style={{
+         position: 'absolute',
+         top: '50%',
+         left: '50%',
+         height:'150px',width:'150px',
+         transform: 'translate(-50%, -50%) rotate(90deg)',
+
+         opacity: 0.5, // Adjust the opacity as needed
+         zIndex: 4,
+       }}
+     />
+    
+     <div className="capture-button-container">
+       <div onClick={capture} className="capture-button"></div>
+     </div>
+   </div>
+   
       )}
       <canvas ref={canvasRef} style={{ display: 'none' }} />
 
