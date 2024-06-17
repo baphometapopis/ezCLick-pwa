@@ -23,7 +23,7 @@ export const ProposalInfoPage = ({ route }) => {
   const [referbackedPoints, setReferbackedPoints] = useState('');
 
 
-  const [proposalStatusData, setProposalStatusData] = useState();
+  const [proposalStatusData, setProposalStatusData] = useState('');
   const [isCopied,setIscopied]=useState(false)
   const [isCopied1,setIscopied1]=useState(false)
 
@@ -286,6 +286,17 @@ setReferbackedPoints(referbackString)
               </button>
             }
  {((proposalInfo?.is_otp_verify===0 && proposalInfo?.is_declaration_accepted===0)  ) && (
+              <button
+                className={"StartInspection"}
+              onClick={()=>navigate('/otpScreen',{state:{proposaldata:proposalInfo}})}
+              >
+                <img src={StartInspection} alt="Start Inspection Icon" />
+                <span>Verify</span>
+              </button>
+            )}
+
+{((proposalInfo?.is_otp_verify===0 && proposalStatusData ===
+                "Referback")  ) && (
               <button
                 className={"StartInspection"}
               onClick={()=>navigate('/otpScreen',{state:{proposaldata:proposalInfo}})}
