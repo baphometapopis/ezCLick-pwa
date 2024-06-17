@@ -207,7 +207,6 @@ const skipImage=()=>{
           if (currentImageIndex < images.length - 1) {
             // Move to the next image if available
             setCapturedImage(null);
-            setIsModalOpen(true);
             let data = {
               break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
               question_id: images[currentImageIndex]?.id,
@@ -221,6 +220,8 @@ const skipImage=()=>{
             if(submitimgres){
 
           setCurrentImageIndex(currentImageIndex + 1);
+          setIsModalOpen(true);
+
 }
           } else {
             // Navigate to the next screen if all images are captured
