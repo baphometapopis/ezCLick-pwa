@@ -26,7 +26,10 @@ const OtpScreen = () => {
   };
 
   const handleEmailVerification = async () => {
-    if (email === ProposalInfo.email) {
+
+
+   if(ProposalInfo?.breakin_status_name==='Referback'){
+    if (email === ProposalInfo.al_email) {
       const data = {
         break_in_case_id: ProposalInfo?.breakin_inspection_id,
         proposal_id: ProposalInfo?.id,
@@ -64,6 +67,46 @@ const OtpScreen = () => {
         pauseOnHover: true,
         theme: "colored",
       });
+    }}else{
+      if (email === ProposalInfo.email) {
+        const data = {
+          break_in_case_id: ProposalInfo?.breakin_inspection_id,
+          proposal_id: ProposalInfo?.id,
+          email_id: ProposalInfo?.email
+        };
+  
+        const apires = await getOTP(data);
+        if (apires?.status) {
+          setIsEmailVerified(true);
+  
+          toast.success(apires?.message, {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "colored",
+          });
+        } else {
+          toast.error(apires?.message, {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "colored",
+          });
+        }
+      } else {
+        toast.error("Incorrect Email", {
+          position: "bottom-right",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "colored",
+        });
+      }
     }
   };
 
@@ -130,7 +173,12 @@ const OtpScreen = () => {
         <div className="email-verification">
           <img src={EmailVerification} style={{ height: '120px', width: '150px' }} alt="Email Verification" />
           <h2>Email Verification</h2>
-          <p>Enter the registered {maskEmail(ProposalInfo?.email)} mail</p>
+       
+       {  ProposalInfo?.breakin_status_name==='Referback'?
+
+           <p>Enter the registered {maskEmail(ProposalInfo?.al_email)} mail</p>:
+          <p>Enter the registered {ProposalInfo?.email} mail</p>
+}
           <input
             type="text"
             placeholder="Enter registered email"
