@@ -174,7 +174,7 @@ const CameraScreen = () => {
           
           const response = await submitImage(data);
 
-          if (response) {
+          if (response?.status) {
             navigation("/ShowInspectionImages", {
               state: {
                 capturedImagesWithOverlay: allCapturedImages,
@@ -197,7 +197,7 @@ const CameraScreen = () => {
             };
             
             const submissionResult = await submitImage(data);
-            if (submissionResult) {
+            if (submissionResult?.status) {
               setCurrentImageIndex(currentImageIndex + 1);
             }
           } else {
