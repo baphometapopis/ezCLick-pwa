@@ -195,7 +195,7 @@ const skipImage=()=>{
           
           const response = await submitImage(data);
 
-          if(response?.status){
+          if(response){
             navigation("/ShowInspectionImages", {
               state: {
                 capturedImagesWithOverlay: allCapturedImages,
@@ -207,6 +207,7 @@ const skipImage=()=>{
           if (currentImageIndex < images.length - 1) {
             // Move to the next image if available
             setCapturedImage(null);
+            setIsModalOpen(true);
             let data = {
               break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
               question_id: images[currentImageIndex]?.id,
@@ -216,13 +217,7 @@ const skipImage=()=>{
               breakin_steps: 'images'
             };
             
-            const submitimgres=await submitImage(data);
-            if(submitimgres){
-
-          setCurrentImageIndex(currentImageIndex + 1);
-          setIsModalOpen(true);
-
-}
+            submitImage(data);
           } else {
             // Navigate to the next screen if all images are captured
             navigation("/ShowInspectionImages", {
@@ -252,6 +247,7 @@ const submitImage=async(data)=>{
           toast.info("Uploading Image...", { autoClose: false });
 
           if(submittedresponse?.status){
+          setCurrentImageIndex(currentImageIndex + 1);
 
             toast.success(submittedresponse?.message, {
               position: "bottom-right",
