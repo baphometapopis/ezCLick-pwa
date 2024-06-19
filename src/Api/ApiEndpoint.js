@@ -1,4 +1,4 @@
-export const url = 'http://breakin.ezclicktech.com/api/'; //demo
+export const url = 'https://breakin.ezclicktech.com/api/'; //demo
 // export const url = 'https://bp.mypolicynow.com/'; //live
 
 export const Api_Endpoints = {
