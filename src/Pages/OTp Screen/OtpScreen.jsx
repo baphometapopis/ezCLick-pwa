@@ -177,7 +177,7 @@ const OtpScreen = () => {
        {  ProposalInfo?.breakin_status_name==='Referback'?
 
            <p>Enter the registered {maskEmail(ProposalInfo?.al_email)} mail</p>:
-          <p>Enter the registered {ProposalInfo?.email} mail</p>
+          <p>Enter the registered {maskEmail(ProposalInfo?.email)} mail</p>
 }
           <input
             type="text"
