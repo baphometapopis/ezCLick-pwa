@@ -196,7 +196,7 @@ const VideoRecorder = () => {
           mimeType: "video/webm",
         });
       } catch (e) {
-        alert("MediaRecorder API is not supported on your device/browser.");
+        alert("MediaRecorder is not supported on your device/browser use Different Browser e.g Chrome ,Firefox.");
         console.error("MediaRecorder API not supported:", e);
         return;
       }
