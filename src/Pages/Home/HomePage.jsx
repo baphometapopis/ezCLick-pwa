@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../Component/Header";
 import SignaturePadComponent from "../../Component/SignaturePadComponent";
 import { Search2 } from "../../Constant/ImageConstant";
+import { encrypt } from "../../Utils/encryption";
 import "./home.css"; // Import CSS file
 
 const HomePage = () => {
@@ -16,7 +17,7 @@ const HomePage = () => {
   const handleSearchSubmit = () => {
     // Handle search submission logic here
     console.log("Search keyword:", searchKeyword);
-    navigate(`/proposal-info/${searchKeyword}`)
+    navigate(`/proposal-info/${encrypt(searchKeyword)}`)
     
     // You can perform further actions such as fetching data based on the search keyword
   };

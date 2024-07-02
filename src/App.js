@@ -34,7 +34,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route  
-          path="/proposal-info/:proposalNumber"
+          path="/proposal-info/:encryptedproposalNumber"
           element={<ProposalInfoPage />}
         />
         <Route  

@@ -10,10 +10,13 @@ import { fetchLoginDataByProposalNoAPi } from "../../Api/fetchLoginDetailsByProp
 import {  storeDataLocalStorage } from "../../Utils/LocalStorage";
 import Header from "../../Component/Header";
 import DeclarationModal from "../../Component/Modal/Declaration Modal/DeclarationModal";
+import { decrypt } from "../../Utils/encryption";
 
 export const ProposalInfoPage = ({ route }) => {
   
-  const { proposalNumber } = useParams(); //extract proposal number
+  const { encryptedproposalNumber } = useParams(); //extract proposal number
+
+  const proposalNumber = decrypt(encryptedproposalNumber)
 
   // const [isLoading, setLoading] = useState(false);
   const [isProposalexist, setIsProposalExist] = useState(false);
