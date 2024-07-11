@@ -1,10 +1,9 @@
 import {Api_Endpoints} from './ApiEndpoint';
 
 export const fetchLoginDataByProposalNoAPi = async data => {
-  console.log(data, 'getProposalDetails');
 
   var formdata = new FormData();
-  formdata.append('proposal_no', data);
+  formdata.append('proposal_id', data);
 
   const url = Api_Endpoints.fetchLoginDetailsByProposalNoEndpoint;
 
