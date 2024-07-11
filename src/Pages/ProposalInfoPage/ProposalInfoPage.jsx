@@ -11,12 +11,16 @@ import {  storeDataLocalStorage } from "../../Utils/LocalStorage";
 import Header from "../../Component/Header";
 import DeclarationModal from "../../Component/Modal/Declaration Modal/DeclarationModal";
 import { decrypt } from "../../Utils/encryption";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const ProposalInfoPage = ({ route }) => {
   
   const { encryptedproposalNumber } = useParams(); //extract proposal number
 
-  const proposalNumber = decrypt(encryptedproposalNumber)
+  const proposalID = decrypt(encryptedproposalNumber)
+
+  const [proposalNumber,setProposalNumber]=useState('')
+
 
   // const [isLoading, setLoading] = useState(false);
   const [isProposalexist, setIsProposalExist] = useState(false);
@@ -61,7 +65,7 @@ const handleCopy1 = (phoneNumber) => {
     // setLoading(true);
 
     try {
-      const getData = await fetchProposalDetails(proposalNumber);
+      const getData = await fetchProposalDetails(proposaldata);
       if (getData.status) {
         setProposalInfo(getData?.data);
         setAdminComments(getData?.admin_comment)
@@ -99,21 +103,33 @@ setReferbackedPoints(referbackString)
     } finally {
       // setLoading(false);
     }
-  }, [proposalNumber]);
+  }, [proposalID]);
   // Make sure to include all dependencies used within useCallback.
 
   const fetchProposal = useCallback(async () => {
   
     
-    const response = await fetchLoginDataByProposalNoAPi(proposalNumber); // Call API function with proposal number
+    const response = await fetchLoginDataByProposalNoAPi(proposalID); // Call API function with proposal number
     if (response?.status) {
 
       setIsProposalExist(true);
-      fetchData(response?.data?.user_details);
+      setProposalNumber(response?.login_data?.proposal_data?.proposal_no)
+      fetchData(response?.login_data?.proposal_data?.proposal_no);
       storeDataLocalStorage('Claim_loginDetails',response?.login_data)
 
     }
-  }, [proposalNumber, setIsProposalExist, fetchData]);
+    else{
+      toast.error(response?.message, {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "colored",
+      });
+
+    }
+  }, [proposalID, setIsProposalExist, fetchData]);
 
   useEffect(() => {
     fetchProposal();
@@ -123,6 +139,7 @@ setReferbackedPoints(referbackString)
     setIsCustomerCareModalVisible(!isCustomerCareModalVisible);
   };
 
+  useEffect(()=>{},[proposalNumber])
   
   return (
     <div className="container">

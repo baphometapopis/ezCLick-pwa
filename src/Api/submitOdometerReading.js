@@ -34,7 +34,6 @@ export const submit_odometer_Reading = async (data) => {
       return response.status;
     }
     const datas = await response.json();
-    console.log(datas);
 
     return datas;
   } catch (error) {

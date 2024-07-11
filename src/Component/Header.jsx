@@ -7,7 +7,7 @@ import { fetchDataLocalStorage } from "../Utils/LocalStorage";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Header = ({ checkLocal }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const fetchDataFromLocalStorage = async () => {
  
     const localdata = await fetchDataLocalStorage('Claim_loginDetails');

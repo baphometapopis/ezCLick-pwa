@@ -34,7 +34,6 @@ export const getOTP = async (data) => {
         return response.status;
       }
       const datas = await response.json();
-      console.log(datas);
   
       return datas;
     } catch (error) {
@@ -77,7 +76,6 @@ export const getOTP = async (data) => {
         return response.status;
       }
       const datas = await response.json();
-      console.log(datas);
   
       return datas;
     } catch (error) {

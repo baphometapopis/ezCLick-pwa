@@ -10,6 +10,7 @@ import Header from "../../Component/Header";
 import { fetchDataLocalStorage } from "../../Utils/LocalStorage";
 import InspectionModalRules from "../../Component/Modal/InspectionModalRules";
 import { getFullReport } from "../../Api/fetchReferBackInspection";
+import { encrypt } from "../../Utils/encryption";
 
 const ShowinspectionImages = ({ route }) => {
   const [IsInstructionModalVisible,setIsInstructionModalVisible]=useState(false)
@@ -163,7 +164,7 @@ const data = {
       if(nextStep==='video'){
 
 setIsInstructionModalVisible(true)}else{
-  navigate(`/proposal-info/${localdata?.proposal_data?.proposal_no}`,{replace:true})
+  navigate(`/proposal-info/${encrypt(String(localdata?.proposal_data?.proposal_id))}`,{replace:true})
 
 }
 
@@ -234,9 +235,7 @@ setIsInstructionModalVisible(true)}else{
           );
           if (submittedresponse?.status) {
             setcurrentQuestion(questionData?.question_id);
-            console.log(
-              `Question ${questionData?.question_id} submitted successfully`,
-            );
+           
             questiondone.push(Number(questionData?.question_id));
             questiondoneImages.push(questionData?.part);
             console.log(

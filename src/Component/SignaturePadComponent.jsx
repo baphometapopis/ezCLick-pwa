@@ -11,7 +11,6 @@ const SignaturePadComponent = ({getSignature}) => {
   const saveSignature = () => {
     const dataURL = signaturePadRef.current.toDataURL();
     getSignature(dataURL)
-    console.log(dataURL); // You can save this data URL or send it to your server
   };
 
   return (

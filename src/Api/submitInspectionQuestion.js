@@ -1,7 +1,6 @@
 import {Api_Endpoints} from './ApiEndpoint';
 
 export const submit_inspection_checkpointData = async data => {
-  console.log(data, 'dsdsd');
   var formdata = new FormData();
 
   formdata.append('user_id', data?.user_id );
@@ -9,6 +8,8 @@ export const submit_inspection_checkpointData = async data => {
   formdata.append('question_answer_ids', data?.question_answer_ids);
   formdata.append('product_type_id', data?.product_type_id );
   formdata.append('breakin_steps', data?.breakin_steps );
+  formdata.append('is_admin', 0 );
+
 
   const url = Api_Endpoints.submit_inspection_checkpoint;
   
@@ -35,7 +36,6 @@ export const submit_inspection_checkpointData = async data => {
       return response.status;
     }
     const datas = await response.json();
-    console.log(datas);
 
     return datas;
   } catch (error) {
@@ -44,7 +44,6 @@ export const submit_inspection_checkpointData = async data => {
 };
 
 export const submit_inspection_Images = async (data, param) => {
-  console.log(data, param);
   var formdata = new FormData();
 
   formdata.append('user_id', data?.user_id);
@@ -79,7 +78,6 @@ export const submit_inspection_Images = async (data, param) => {
       return response.status;
     }
     const datas = await response.json();
-    console.log(datas);
 
     return datas;
   } catch (error) {
@@ -88,7 +86,6 @@ export const submit_inspection_Images = async (data, param) => {
 };
 
 export const submit_inspection_Video = async (data) => {
-  console.log(data)
   var formdata = new FormData();
 
   formdata.append('user_id', data?.user_id);
@@ -124,7 +121,6 @@ export const submit_inspection_Video = async (data) => {
       return response.status;
     }
     const datas = await response.json();
-    console.log(datas);
 
     return datas;
   } catch (error) {
@@ -134,7 +130,6 @@ export const submit_inspection_Video = async (data) => {
 
 
 export const updateProposalSteps = async (data) => {
-  console.log(data)
   var formdata = new FormData();
 
   
@@ -170,7 +165,6 @@ export const updateProposalSteps = async (data) => {
       return response.status;
     }
     const datas = await response.json();
-    console.log(datas);
 
     return datas;
   } catch (error) {

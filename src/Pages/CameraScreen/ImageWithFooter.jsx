@@ -49,13 +49,11 @@ const ImageWithFooter = ({ imageUrl, footerInfo, footerLogoUrl }) => {
     // Load image
     const image = new Image();
     image.onload = () => {
-      console.log('Image loaded');
 
       // Draw the image onto the canvas
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height - footerHeight);
       // Get data URL of the canvas
       const dataURL = canvas.toDataURL('image/jpeg');
-      console.log(dataURL)
       setImageDataURL(dataURL);
     };
   

@@ -1,5 +1,5 @@
-export const url = 'https://breakin.ezclicktech.com/api/'; //live
-// export const url = "https://demo.ezclicktech.com/Ezclick/";
+// export const url = 'https://breakin.ezclicktech.com/api/'; //live
+export const url = "https://demo.ezclicktech.com/Ezclick/";
 
 
 export const Api_Endpoints = {

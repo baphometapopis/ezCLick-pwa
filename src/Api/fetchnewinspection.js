@@ -1,7 +1,6 @@
 import { Api_Endpoints } from "./ApiEndpoint";
 
 export const fetchNewInspection = async (data) => {
-  console.log(data, "getProposalDetails");
 
   var formdata = new FormData();
   formdata.append("user_id", data?.id);
@@ -32,7 +31,6 @@ export const fetchNewInspection = async (data) => {
       return response.status;
     }
     const datas = await response.json();
-    console.log(response);
 
     return datas;
   } catch (error) {

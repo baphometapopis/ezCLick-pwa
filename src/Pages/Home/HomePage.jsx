@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchProposalDetails } from "../../Api/fetchProposalDetails";
 import Header from "../../Component/Header";
 import SignaturePadComponent from "../../Component/SignaturePadComponent";
 import { Search2 } from "../../Constant/ImageConstant";
 import { encrypt } from "../../Utils/encryption";
 import "./home.css"; // Import CSS file
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const HomePage = () => {
   const navigate=useNavigate()
   const [searchKeyword, setSearchKeyword] = useState(""); // State to store search keyword
@@ -14,11 +16,25 @@ const HomePage = () => {
     setSearchKeyword(event.target.value); // Update search keyword as user types
   };
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit =async () => {
     // Handle search submission logic here
-    console.log("Search keyword:", searchKeyword);
-    navigate(`/proposal-info/${encrypt(searchKeyword)}`)
-    
+
+    const res = await fetchProposalDetails(searchKeyword)
+    let proposal_id= res?.data?.id
+    if(res?.status){
+
+    navigate(`/proposal-info/${encrypt(String(proposal_id))}`)
+    }else{
+
+      toast.error(res?.message, {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "colored",
+      });
+    }
     // You can perform further actions such as fetching data based on the search keyword
   };
 

@@ -27,7 +27,6 @@ const PermissionPage = () => {
   useEffect(() => {
     // Check if the page is accessed on a mobile device
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    console.log(userAgent)
     setIsMobile(/android|iphone|ipad|ipod/i.test(userAgent));
 
     // Check for camera permission
@@ -100,7 +99,6 @@ const PermissionPage = () => {
     const reslocaldata = await fetchDataLocalStorage('Claim_loginDetails')
 
     const ProposalInfo = await fetchDataLocalStorage('Claim_proposalDetails')
-    console.log(reslocaldata,ProposalInfo)
     
     if (reslocaldata && ProposalInfo) {
       setLocaldata(reslocaldata)
@@ -115,11 +113,9 @@ const PermissionPage = () => {
 
       }
      const data = await updateProposalSteps(postdata)
-     console.log(data,'sddsa')
       if(data?.status){
 
         const getData = await fetchProposalDetails(reslocaldata?.proposal_data?.proposal_no);
-        console.log(getData,'Llllll')
         if(getData?.status){
           storeDataLocalStorage('Claim_proposalDetails',getData)
 
@@ -151,7 +147,6 @@ const PermissionPage = () => {
 
 
       if(ProposalInfo?.data?.breakin_status===0){
-        console.log(ProposalInfo?.data?.breakin_steps,'breakinStatus is pending')
         redirectUser(ProposalInfo?.data?.breakin_steps)
       }
       

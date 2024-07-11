@@ -30,7 +30,6 @@ export const fetch_Image_inspection_question = async data => {
       return response.status;
     }
     const datas = await response.json();
-console.log(datas)
     return datas;
   } catch (error) {
     throw new Error(`API Error - ${error}`);

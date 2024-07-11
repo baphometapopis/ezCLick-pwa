@@ -11,6 +11,7 @@ import Header from "../../Component/Header";
 import InspectionModalRules from "../../Component/Modal/InspectionModalRules";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { encrypt } from "../../Utils/encryption";
 
 export const InspectionCheckpoint = ({ route }) => {
   const [IsInstructionModalVisible,setIsInstructionModalVisible]=useState(false)
@@ -60,7 +61,6 @@ export const InspectionCheckpoint = ({ route }) => {
     const response = await fetch_Checkpoint_inspection_question();
     if (response.status) {
       setCheckpointQuestion(response.data);
-      // Initialize error messages for each question
       const initialErrorMessages = {};
       response.data.forEach((question) => {
         initialErrorMessages[question.breakin_inspection_post_question_id] = "";
@@ -69,33 +69,31 @@ export const InspectionCheckpoint = ({ route }) => {
     }
    }, [submittedQuestion]);
 
-  const getLabelForValue = (value) => {
-    switch (value) {
-      case 1:
-        return "Safe";
-      case 2:
-        return "Scratch";
-      case 3:
-        return "Pressed";
-      case 4:
-        return "Broken";
-      case 5:
-        return "Good";
-      case 6:
-        return "Not Working";
-      case 7:
-        return "Not Available";
-      default:
-        return "";
-    }
-  };
+  // const getLabelForValue = (value) => {
+  //   switch (value) {
+  //     case 1:
+  //       return "Safe";
+  //     case 2:
+  //       return "Scratch";
+  //     case 3:
+  //       return "Pressed";
+  //     case 4:
+  //       return "Broken";
+  //     case 5:
+  //       return "Good";
+  //     case 6:
+  //       return "Not Working";
+  //     case 7:
+  //       return "Not Available";
+  //     default:
+  //       return "";
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchQuestions();
-  }, [fetchQuestions]);
 
   // Function to handle radio button change
   const handleRadioChange = (questionId, answerId) => {
+
     setSelectedAnswers({
       ...selectedAnswers,
       [questionId]: answerId,
@@ -126,7 +124,6 @@ export const InspectionCheckpoint = ({ route }) => {
     }
   }
   const goNext=async()=>{
-console.log(localdata,'PPppppppppppp')
     let nextStep='images'
 
     if(proposalInfo?.is_referback_images===0&&proposalInfo?.breakin_status===3&&proposalInfo?.is_referback_video===0)
@@ -155,7 +152,7 @@ const data = {
 setIsInstructionModalVisible(true)
 }
 else if((nextStep==='completed')){
-  navigate(`/proposal-info/${localdata?.proposal_data?.proposal_no}`,{replace:true})
+  navigate(`/proposal-info/${encrypt(String(localdata?.proposal_data?.proposal_id))}`,{replace:true})
 
 }else if((nextStep==='video')){
   // navigate('/videoRecord',{replace:true})
@@ -185,29 +182,20 @@ else if((nextStep==='completed')){
   }
   const handleSubmit = async () => {
     setIsSubmitting(true)
-
-
     if (allQuestionsAnswered()) {
-
       const formattedData = Object.entries(selectedAnswers)
       .map(([key, value]) => `${key}:${value}`)
-      .join(',');
-    
+      .join(',');    
       const data ={
-
         user_id:localdata?.user_details?.id,
-proposal_list_id:proposalInfo?.id,
-question_answer_ids:`${formattedData}`,
-product_type_id:proposalInfo?.v_product_type_id,
-breakin_steps:'images'
-
+        proposal_list_id:proposalInfo?.id,
+        question_answer_ids:`${formattedData}`,
+        product_type_id:proposalInfo?.v_product_type_id,
+        breakin_steps:'images'
       }
 
 
-
-      const submittedresponse = await submit_inspection_checkpointData(
-        data
-      );
+const submittedresponse = await submit_inspection_checkpointData(data);
 if(submittedresponse?.status){
   toast.success(submittedresponse?.message, {
         position: "bottom-right",
@@ -277,7 +265,11 @@ setIsSubmitting(false)
       setLocaldata(localdatares)
       setProposalInfo(proposalInfo?.data)
     }
+
   }
+  useEffect(() => {
+    fetchQuestions();
+  }, [fetchQuestions]);
 
   useEffect(() => {
     fetchDataFromLocalStorage()
@@ -308,19 +300,19 @@ setIsSubmitting(false)
                     checked={
                       String(selectedAnswers[
                         question.breakin_inspection_post_question_id
-                      ]) === String(question.answers_obj[answerId])
+                      ]) === String(answerId)
                     }
                     onChange={() =>
                       handleRadioChange(
                         question.breakin_inspection_post_question_id,
-                        String(question.answers_obj[answerId])
+                        String(answerId)
                       )
                     }
                   />
                   <label
                     htmlFor={`answer_${question.breakin_inspection_post_question_id}_${answerId}`}
                   >
-                    {getLabelForValue(question.answers_obj[answerId])}
+                    {question.answers_obj[answerId]}
                   </label>
                 </div>
               ))}

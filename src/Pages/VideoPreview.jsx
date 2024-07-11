@@ -10,6 +10,7 @@ import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
+import { encrypt } from "../Utils/encryption";
 
 const VideoPreview = () => {
   const { state } = useLocation();
@@ -32,12 +33,10 @@ const VideoPreview = () => {
   const fetchDataFromLocalStorage = async () => {
     const localdata = await fetchDataLocalStorage('Claim_loginDetails')
     const localproposalInfo = await fetchDataLocalStorage('Claim_proposalDetails')
-
-      console.log(localdata)
     if (localdata && localproposalInfo) {
       setLocaldata(localdata)
       setProposalInfo(localproposalInfo)
-      setProposalNo(localproposalInfo?.data?.proposal_no)
+      setProposalNo(localdata?.proposal_data?.proposal_id)
     }
   }
 
@@ -63,10 +62,8 @@ const VideoPreview = () => {
       odometer:odometerReading,
       breakin_steps:'completed'
     };
-    console.log(data)
 
     const odometerres= await submit_odometer_Reading(data)
-    console.log(odometerres,'odometerReading')
     const res = await submit_inspection_Video(data);
     if (res?.status) {
     toast.dismiss();
@@ -81,7 +78,8 @@ const VideoPreview = () => {
         theme: "colored",
       });
 
-            navigate(`/proposal-info/${ProposalNo}`,{replace:true});
+         
+      navigate(`/proposal-info/${encrypt(String(ProposalNo))}`,{replace:true});
 
     }
     else{
@@ -136,8 +134,8 @@ const VideoPreview = () => {
     const inputFileSize = inputData.size;
     const compressedFileSize = compressedData.size;
     const compressedVideoUrl = URL.createObjectURL(new Blob([compressedData.buffer], { type: 'video/webm' }));
-    console.log('Input file size:', inputFileSize, 'bytes');
-    console.log('Compressed file size:', compressedFileSize, 'bytes');
+    // console.log('Input file size:', inputFileSize, 'bytes');
+    // console.log('Compressed file size:', compressedFileSize, 'bytes');
     setCompressedVideoUri(compressedVideoUrl);
   };
   

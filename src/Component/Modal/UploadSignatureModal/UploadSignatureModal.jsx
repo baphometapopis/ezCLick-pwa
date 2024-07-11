@@ -119,7 +119,6 @@ const handleSignatureUpload=async()=>{
 
 
   const res = await uploadSignature(data?.id,croppedImage)
-  console.log(res?.status,'Upload Signature')
 
   if(res?.status){
 

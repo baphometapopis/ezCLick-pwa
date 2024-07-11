@@ -5,6 +5,7 @@ import { EmailVerification, OtpImage } from '../../Constant/ImageConstant';
 import './OtpScreen.css'; // Import CSS file for styling
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { encrypt } from '../../Utils/encryption';
 
 const OtpScreen = () => {
   const { state } = useLocation();
@@ -118,7 +119,6 @@ const OtpScreen = () => {
       };
     if(otp){
         const apires= await verifyOTP(data)
-        console.log(apires)
         if (apires?.status) {
             toast.success(apires?.message, {
               position: "bottom-right",
@@ -129,7 +129,7 @@ const OtpScreen = () => {
               theme: "colored",
             });
 
-                     navigate(`/proposal-info/${ProposalInfo?.proposal_no}`,{replace:true});
+                     navigate(`/proposal-info/${encrypt(String(ProposalInfo?.id))}`,{replace:true});
 
           } else {
             toast.error(apires?.message, {

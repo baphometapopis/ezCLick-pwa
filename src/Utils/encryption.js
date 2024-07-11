@@ -19,14 +19,13 @@ const fromUrlSafeBase64 = (urlSafeBase64) => {
 // Encrypt function
 export const encrypt = (data) => {
   const encryptedData = CryptoJS.AES.encrypt(data, secretKey).toString();
-  const base64EncryptedData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encryptedData));
-  return toUrlSafeBase64(base64EncryptedData);
+  return toUrlSafeBase64(encryptedData);
 };
 
 // Decrypt function
 export const decrypt = (ciphertext) => {
   const standardBase64 = fromUrlSafeBase64(ciphertext);
-  const parsedEncryptedData = CryptoJS.enc.Base64.parse(standardBase64).toString(CryptoJS.enc.Utf8);
-  const bytes = CryptoJS.AES.decrypt(parsedEncryptedData, secretKey);
+  const bytes = CryptoJS.AES.decrypt(standardBase64, secretKey);
   return bytes.toString(CryptoJS.enc.Utf8);
 };
+
