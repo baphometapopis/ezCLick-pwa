@@ -11,10 +11,10 @@ import { fetchDataLocalStorage } from "../../Utils/LocalStorage";
 import InspectionModalRules from "../../Component/Modal/InspectionModalRules";
 import { getFullReport } from "../../Api/fetchReferBackInspection";
 import { encrypt } from "../../Utils/encryption";
+import FullPageLoader from "../../Component/FullPageLoader";
 
 const ShowinspectionImages = ({ route }) => {
   const [IsInstructionModalVisible,setIsInstructionModalVisible]=useState(false)
-
   const [selectedImage, setSelectedImage] = useState(null);
   const [isRequestDone,setIsRequestDone]=useState(false)
   const [CurrentQuestion,setcurrentQuestion]=useState('');
@@ -88,6 +88,7 @@ const ShowinspectionImages = ({ route }) => {
   }
 
   const fetchDataFromLocalStorage = async () => {
+    setIsLoading(true)
     const reslocaldata = await fetchDataLocalStorage('Claim_loginDetails')
     const resproposalInfo = await fetchDataLocalStorage('Claim_proposalDetails')
     const data ={
@@ -114,7 +115,6 @@ if(resproposalInfo?.data?.breakin_status===3){
 
    filteredimage=  imageRes?.data.filter(item => selectedIds.includes(item.id));
 
-
 }
 
 
@@ -127,6 +127,8 @@ if(resproposalInfo?.data?.breakin_status===3){
       setProposalInfo(resproposalInfo)
       setFinalData(filteredimage)
     }
+   setIsLoading(false)
+
   }
 
 
@@ -140,7 +142,7 @@ const navigate =useNavigate()
 
 
   const goNext=async()=>{
-
+    setIsLoading(true)
     let nextStep='video'
 
     if(!proposalInfo?.data?.is_referback_video&&proposalInfo?.data?.breakin_status===3)
@@ -182,13 +184,14 @@ setIsInstructionModalVisible(true)}else{
 
 
 }
-
+setIsLoading(false)
 
   }
 
 
 
   const handleSubmit = () => {
+    setIsLoading(true)
     // setIsSubmitted(false); // Reset submitted state
     if (!isRequestDone) {
    
@@ -266,6 +269,7 @@ setIsInstructionModalVisible(true)}else{
   
 
   async function FilterImages() {
+    setIsLoading(true)
     const sendPOSTDATA = [];
     for (const questionId of fetchedQuestion) {
       capturedImagesWithOverlay.map(async image => {
@@ -287,6 +291,7 @@ setIsInstructionModalVisible(true)}else{
       });
     }
     submitQuestions(sendPOSTDATA);
+    setIsLoading(false)
   }
 
 
@@ -354,14 +359,14 @@ setIsInstructionModalVisible(true)}else{
         
       />
 
-      {isLoading && (
+      {/* {isLoading && (
         <div className="loaderContainer">
           <div className="loaderContainer1">
           <div className="loader"></div>
           <p className="loaderText">{`${CurrentQuestion}/${capturedImagesWithOverlay.length+1} Submitting Question`}</p>
           </div>
         </div>
-      )}
+      )} */}
       {selectedImage && (
         <div className="modalContainer">
           <div className="closeButton" onClick={handleModalClose}>
@@ -381,6 +386,7 @@ setIsInstructionModalVisible(true)}else{
         </div>
       )}
     </div>
+    <FullPageLoader loading={isLoading}/>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
 import { encrypt } from "../Utils/encryption";
+import FullPageLoader from "../Component/FullPageLoader";
 
 const VideoPreview = () => {
   const { state } = useLocation();
@@ -25,6 +26,7 @@ const VideoPreview = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [compressedVideoUri, setCompressedVideoUri] = useState(null);
+  const [isLoading,setisLoading]=useState(false)
 
   const [odometerError, setOdometerError] = useState(false); // Track odometer error
 
@@ -41,13 +43,13 @@ const VideoPreview = () => {
   }
 
   const submitVideo = async () => {
-    compressVideo()
+    setisLoading(true)
+    // compressVideo()
     setIsSubmitting(true)
     if (!odometerReading) {
       setOdometerError(true); // Set odometer error if reading is not provided
       return; // Stop submission if odometer reading is missing
     }
-    toast.info("Uploading Video...", { autoClose: false });
 
     const videopath = {
       uri: videoblob,
@@ -66,7 +68,6 @@ const VideoPreview = () => {
     const odometerres= await submit_odometer_Reading(data)
     const res = await submit_inspection_Video(data);
     if (res?.status) {
-    toast.dismiss();
 
       // navigate(`/proposal-info/${ProposalNo}`,{replace:true});
       toast.success(res?.message, {
@@ -83,7 +84,6 @@ const VideoPreview = () => {
 
     }
     else{
-    toast.dismiss();
 
 
    toast.error(res?.message, {
@@ -97,6 +97,8 @@ const VideoPreview = () => {
 
     }
     setIsSubmitting(false)
+    setisLoading(false)
+
   };
 
   useEffect(() => {
@@ -123,26 +125,26 @@ const VideoPreview = () => {
   const handleRetake = () => {
     navigate('/VideoRecord',{replace:true});
   };
-  const compressVideo = async () => {
-    console.log('[clicked compresor ',videoUri)
-    const ffmpeg = new FFmpeg({ log: true });
-    await ffmpeg.load();
-    await ffmpeg.writeFile('input.webm', await fetchFile(videoUri));
-    await ffmpeg.exec(['-i', 'input.webm', '-vcodec', 'libvpx', '-crf', '28', '-b:v', '1M', 'output.webm']);
-    const inputData = await fetchFile(videoUri);
-    const compressedData = await ffmpeg.readFile('output.webm');
-    const inputFileSize = inputData.size;
-    const compressedFileSize = compressedData.size;
-    const compressedVideoUrl = URL.createObjectURL(new Blob([compressedData.buffer], { type: 'video/webm' }));
-    // console.log('Input file size:', inputFileSize, 'bytes');
-    // console.log('Compressed file size:', compressedFileSize, 'bytes');
-    setCompressedVideoUri(compressedVideoUrl);
-  };
+  // const compressVideo = async () => {
+  //   console.log('[clicked compresor ',videoUri)
+  //   const ffmpeg = new FFmpeg({ log: true });
+  //   await ffmpeg.load();
+  //   await ffmpeg.writeFile('input.webm', await fetchFile(videoUri));
+  //   await ffmpeg.exec(['-i', 'input.webm', '-vcodec', 'libvpx', '-crf', '28', '-b:v', '1M', 'output.webm']);
+  //   const inputData = await fetchFile(videoUri);
+  //   const compressedData = await ffmpeg.readFile('output.webm');
+  //   const inputFileSize = inputData.size;
+  //   const compressedFileSize = compressedData.size;
+  //   const compressedVideoUrl = URL.createObjectURL(new Blob([compressedData.buffer], { type: 'video/webm' }));
+  //   // console.log('Input file size:', inputFileSize, 'bytes');
+  //   // console.log('Compressed file size:', compressedFileSize, 'bytes');
+  //   setCompressedVideoUri(compressedVideoUrl);
+  // };
   
 
   useEffect(() => {
    
-    compressVideo();
+    // compressVideo();
   }, [videoUri]); 
 
   useEffect(() => {
@@ -186,6 +188,7 @@ const VideoPreview = () => {
           </div>
         )}
       </div>
+      <FullPageLoader loading={isLoading}/>
     </div>
   );
 };

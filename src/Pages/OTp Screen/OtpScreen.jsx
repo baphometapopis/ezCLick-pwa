@@ -34,7 +34,7 @@ const OtpScreen = () => {
       const data = {
         break_in_case_id: ProposalInfo?.breakin_inspection_id,
         proposal_id: ProposalInfo?.id,
-        email_id: ProposalInfo?.email
+        email_id: email
       };
 
       const apires = await getOTP(data);
@@ -73,7 +73,7 @@ const OtpScreen = () => {
         const data = {
           break_in_case_id: ProposalInfo?.breakin_inspection_id,
           proposal_id: ProposalInfo?.id,
-          email_id: ProposalInfo?.email
+          email_id:email
         };
   
         const apires = await getOTP(data);
@@ -115,7 +115,7 @@ const OtpScreen = () => {
     const data = {
         otp: otp,
         proposal_id: ProposalInfo?.id,
-        email_id: ProposalInfo?.email
+        email_id: email
       };
     if(otp){
         const apires= await verifyOTP(data)

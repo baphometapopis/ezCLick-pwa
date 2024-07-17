@@ -1,0 +1,46 @@
+/* src/components/FullPageLoader.css */
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s;
+    z-index: 1000;
+  }
+  
+  .loader-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .loader-image {
+    width: 200px;
+    height: 100px;
+    animation: fade-in-out 2s infinite;
+  }
+  
+  @keyframes fade-in-out {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  
+  /* @media (max-width: 600px) {
+    .loader-image {
+      width: 50px;
+      height: 50px;
+    }
+  }
+   */

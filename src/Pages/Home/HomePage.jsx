@@ -8,15 +8,19 @@ import { encrypt } from "../../Utils/encryption";
 import "./home.css"; // Import CSS file
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { makeApiCall } from "../../Api/makeApiCall";
+import FullPageLoader from "../../Component/FullPageLoader";
 const HomePage = () => {
   const navigate=useNavigate()
   const [searchKeyword, setSearchKeyword] = useState(""); // State to store search keyword
-
+const [isLoading,setIsLoading]=useState(false)
   const handleSearchChange = (event) => {
     setSearchKeyword(event.target.value); // Update search keyword as user types
   };
 
   const handleSearchSubmit =async () => {
+    setIsLoading(true)
+
     // Handle search submission logic here
 
     const res = await fetchProposalDetails(searchKeyword)
@@ -35,6 +39,8 @@ const HomePage = () => {
         theme: "colored",
       });
     }
+    setIsLoading(false)
+
     // You can perform further actions such as fetching data based on the search keyword
   };
 
@@ -73,6 +79,7 @@ const HomePage = () => {
         />
       </div>
       {/* <SignaturePadComponent/> */}
+      <FullPageLoader loading={isLoading}/>
     </div>
   );
 };

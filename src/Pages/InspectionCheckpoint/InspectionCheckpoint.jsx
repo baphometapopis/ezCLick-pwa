@@ -12,29 +12,24 @@ import InspectionModalRules from "../../Component/Modal/InspectionModalRules";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { encrypt } from "../../Utils/encryption";
+import { makeApiCall } from "../../Api/makeApiCall";
+import { Api_Endpoints } from "../../Api/ApiEndpoint";
+import FullPageLoader from "../../Component/FullPageLoader";
 
 export const InspectionCheckpoint = ({ route }) => {
   const [IsInstructionModalVisible,setIsInstructionModalVisible]=useState(false)
   const [IsVideo,setIsVideo]=useState(false)
-
-
- 
   const [CurrentQuestion,setcurrentQuestion]=useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isRequestDone, setIsRequestDone] = useState(false);
   const [FailedArray, setFailedArray] = useState('');
-
-
-
   const [proposalInfo, setProposalInfo] = useState(null);
   const [localdata, setLocaldata] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalType, setModalType] = useState("");
   const [submittedQuestion, setsubmittedQuestion] = useState([]);
-
   const [submissionStatus, setSubmissionStatus] = useState({}); // State to track submission status
-
   const openModal = (message, type) => {
     
     // setModalMessage(message);
@@ -58,7 +53,10 @@ export const InspectionCheckpoint = ({ route }) => {
 
   // Fetch checkpoint inspection questions
   const fetchQuestions = useCallback(async () => {
-    const response = await fetch_Checkpoint_inspection_question();
+    setIsLoading(true)
+    // const response = await fetch_Checkpoint_inspection_question();
+    
+    const response = await makeApiCall(Api_Endpoints?.fetch_Checkpoint_inspection_question_Endpoint,'POST',)
     if (response.status) {
       setCheckpointQuestion(response.data);
       const initialErrorMessages = {};
@@ -67,6 +65,7 @@ export const InspectionCheckpoint = ({ route }) => {
       });
       setErrorMessages(initialErrorMessages);
     }
+    setIsLoading(false)
    }, [submittedQuestion]);
 
   // const getLabelForValue = (value) => {
@@ -222,17 +221,30 @@ setIsSubmitting(false)
 
 
     } else {
+      let isQuestionRequired=false
       // Display error messages for unanswered questions
       const updatedErrorMessages = {};
       checkpointQuestion.forEach((question) => {
         if (!selectedAnswers[question.breakin_inspection_post_question_id]) {
           updatedErrorMessages[question.breakin_inspection_post_question_id] =
             "This question is required";
+            isQuestionRequired=true
         } else {
           updatedErrorMessages[question.breakin_inspection_post_question_id] =
             "";
+            isQuestionRequired=false
         }
       });
+      toast.error('All Questions are  Mandatory', {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "colored",
+      });
+      
+
       setErrorMessages(updatedErrorMessages);
     }
     setIsSubmitting(false)
@@ -344,7 +356,7 @@ alignItems:'center'}}>
 
       </div>
       
-      {isLoading && (
+      {/* {isLoading && (
         <div className="loaderContainer">
                     <div className="loaderContainer1">
 
@@ -352,7 +364,7 @@ alignItems:'center'}}>
           <p className="loaderText">{`${CurrentQuestion}/${Object.keys(selectedAnswers).length+1} Submitting Question`}</p>
         </div>
         </div>
-      )}
+      )} */}
 
 <InspectionModalRules
         isVisible={IsInstructionModalVisible}
@@ -361,6 +373,7 @@ alignItems:'center'}}>
         isVideo={IsVideo}
         
       />
+      <FullPageLoader loading={isLoading}/>
 
     </div>
   );

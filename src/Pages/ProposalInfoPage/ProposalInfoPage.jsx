@@ -13,7 +13,9 @@ import DeclarationModal from "../../Component/Modal/Declaration Modal/Declaratio
 import { decrypt } from "../../Utils/encryption";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import FullPageLoader from "../../Component/FullPageLoader";
 export const ProposalInfoPage = ({ route }) => {
+  const [isLoading,setIsLoading]=useState(false)
   
   const { encryptedproposalNumber } = useParams(); //extract proposal number
 
@@ -25,7 +27,7 @@ export const ProposalInfoPage = ({ route }) => {
   // const [isLoading, setLoading] = useState(false);
   const [isProposalexist, setIsProposalExist] = useState(false);
   // const [isErrorVisible, setisErrorVisible] = useState(false);
-  const [proposalInfo, setProposalInfo] = useState();
+  const [proposalInfo, setProposalInfo] = useState('');
   const [adminComments, setAdminComments] = useState();
   const [referbackedPoints, setReferbackedPoints] = useState('');
 
@@ -62,11 +64,11 @@ const handleCopy1 = (phoneNumber) => {
 };
 
   const fetchData = useCallback(async (proposaldata) => {
-    // setLoading(true);
-
+    setIsLoading(true)
     try {
       const getData = await fetchProposalDetails(proposaldata);
-      if (getData.status) {
+      if (getData.status) 
+      {
         setProposalInfo(getData?.data);
         setAdminComments(getData?.admin_comment)
         setProposalStatusData(getData?.data?.breakin_status_name)
@@ -95,7 +97,16 @@ if (getData?.data?.is_referback_video === 1) {
 setReferbackedPoints(referbackString)
 
       } else {
-        // setisErrorVisible(true);
+        // setisErrorVisible(true)
+        toast.error(getData?.message, {
+          position: "bottom-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "colored",
+        });;
+        
       }
     } catch (error) {
       console.error("Error fetching proposal details:", error);
@@ -103,12 +114,14 @@ setReferbackedPoints(referbackString)
     } finally {
       // setLoading(false);
     }
-  }, [proposalID]);
+  
+  
+    setIsLoading(false)}, [proposalID]);
   // Make sure to include all dependencies used within useCallback.
 
   const fetchProposal = useCallback(async () => {
   
-    
+    setIsLoading(true)
     const response = await fetchLoginDataByProposalNoAPi(proposalID); // Call API function with proposal number
     if (response?.status) {
 
@@ -129,6 +142,8 @@ setReferbackedPoints(referbackString)
       });
 
     }
+    setIsLoading(false)
+
   }, [proposalID, setIsProposalExist, fetchData]);
 
   useEffect(() => {
@@ -181,21 +196,21 @@ setReferbackedPoints(referbackString)
                 <span className="label">Inspection Type:</span>{" "}
                 <span className="value">{proposalInfo?.inspection_type}</span>
               </p> */}
-              <p>
+              {/* <p>
                 <span className="label"> Proposal Start Date:</span>{" "}
                 <span className="value">{proposalInfo?.proposal_start_date}</span>
               </p>
               <p>
                 <span className="label"> Proposal End Date:</span>{" "}
                 <span className="value">{proposalInfo?.proposal_end_date}</span>
-              </p>
+              </p> */}
               <p>
                 <span className="label">Registration Year:</span>{" "}
                 <span className="value">{proposalInfo?.v_manufacture_year}</span>
               </p>
               <p>
                 <span className="label">Make:</span>{" "}
-                <span className="value">{proposalInfo?.v_make_id}</span>
+                <span className="value">{proposalInfo?.make_name}</span>
               </p>
               <p>
                 <span className="label">Model:</span>{" "}
@@ -305,7 +320,7 @@ setReferbackedPoints(referbackString)
                 <span>Start Inspection</span>
               </button>
             }
- {((proposalInfo?.is_otp_verify===0 && proposalInfo?.is_declaration_accepted===0)  ) && (
+ {/* {((proposalInfo?.is_otp_verify===0 && proposalInfo?.is_declaration_accepted===0)  ) && (
               <button
                 className={"StartInspection"}
               onClick={()=>navigate('/otpScreen',{state:{proposaldata:proposalInfo}})}
@@ -313,10 +328,9 @@ setReferbackedPoints(referbackString)
                 <img src={StartInspection} alt="Start Inspection Icon" />
                 <span>Verify</span>
               </button>
-            )}
+            )} */}
 
-{((proposalInfo?.is_otp_verify===0 && proposalStatusData ===
-                "Referback")  ) && (
+{((proposalInfo?.is_otp_verify===0 )  ) && (
               <button
                 className={"StartInspection"}
               onClick={()=>navigate('/otpScreen',{state:{proposaldata:proposalInfo}})}
@@ -363,6 +377,8 @@ onClick={handleOpenModal}              >
     </div>
   </div>
 )}
+
+<FullPageLoader loading={isLoading}/>
 
 <DeclarationModal
         show={isModalOpen}

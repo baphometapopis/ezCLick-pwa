@@ -13,9 +13,10 @@ import { submit_inspection_Images } from "../../Api/submitInspectionQuestion";
 import { extractBase64FromDataURI } from "../../Utils/convertImageToBase64";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import FullPageLoader from "../../Component/FullPageLoader";
 const CameraScreen = () => {
   const { state } = useLocation();
-  console.log('>>>>>>>>>>>>>',state)
+  const [isLoading,setIsLoading]=useState(false)
 
   const canvasRef = useRef(null);
 
@@ -27,10 +28,10 @@ const CameraScreen = () => {
   };
 
   const BackvideoConstraints = {
-    facingMode: 'user', // This will use the front camera if available
+    // facingMode: 'user', // This will use the front camera if available
 
 
-    // facingMode: { exact: "environment" }, // This will use the back camera if available
+    facingMode: { exact: "environment" }, // This will use the back camera if available
 
   };
   const [localData,setLocalData]=useState('')
@@ -91,6 +92,7 @@ const skipImage=()=>{
   
 
   const handleSavePhoto = async () => {
+    setIsLoading(true)
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
@@ -258,6 +260,7 @@ const submitImage=async(data)=>{
               theme: "colored",
             });
             toast.dismiss()
+            setIsLoading(false)
 
             return true
           }else{
@@ -271,15 +274,19 @@ const submitImage=async(data)=>{
             });
             toast.dismiss()
 
+    setIsLoading(false)
+
             return false
 
           }
+
 }
 
 
   
 
   const fetchInspectionImages = async () => {
+    setIsLoading(true)
     const reslocaldata = await fetchDataLocalStorage('Claim_loginDetails')
 
     const ProposalInfo = await fetchDataLocalStorage('Claim_proposalDetails')
@@ -316,7 +323,8 @@ const data ={
       setImages(filteredImages);
 }
     }
-  };
+ 
+ setIsLoading(false) };
 
   useEffect(() => {
     // Get device ID
@@ -358,7 +366,7 @@ const data ={
   }, []); // Empty dependency array ensures that effect only runs on mount and unmount
 
   useEffect(() => {
-    console.log(images,'IIIIIOOOOOOOOOOOOOOO')
+    // console.log(images,'IIIIIOOOOOOOOOOOOOOO')
   }, [isModalOpen, images,ProposalInfo,VideoConstraints,localData]);
 
   useEffect(()=>{
@@ -466,6 +474,7 @@ const data ={
           </div>
         </div>
       )}
+      <FullPageLoader loading={isLoading}/>
     </div>
   );
 };
