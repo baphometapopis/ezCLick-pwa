@@ -2,6 +2,7 @@
 // export const url = process.env.REACT_APP_API_URL_DEMO; // Switch based on environment
 export const url = '/api/';
 
+// /api/* https://breakin.ezclicktech.com/api/:splat 200
 
 export const Api_Endpoints = {
   login_Endpoint: `${url}api/api/login_pos`,

@@ -28,10 +28,10 @@ const CameraScreen = () => {
   };
 
   const BackvideoConstraints = {
-    // facingMode: 'user', // This will use the front camera if available
+    facingMode: 'user', // This will use the front camera if available
 
 
-    facingMode: { exact: "environment" }, // This will use the back camera if available
+    // facingMode: { exact: "environment" }, // This will use the back camera if available
 
   };
   const [localData,setLocalData]=useState('')
@@ -88,11 +88,8 @@ const skipImage=()=>{
   };
 
 
-  
-  
-
   const handleSavePhoto = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
@@ -184,44 +181,23 @@ const skipImage=()=>{
         // Add the captured image data to the list
         setAllCapturedImages([...allCapturedImages, fileData]);
         
+        let data = {
+          break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
+          question_id: images[currentImageIndex]?.id,
+          user_id: localData?.user_details?.id,
+          proposal_id: ProposalInfo?.id,
+          image: extractBase64FromDataURI(dataURL),
+          breakin_steps: 'images'
+        };
         
-        if(images.length === 1) {
-          let data = {
-            break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
-            question_id: images[currentImageIndex]?.id,
-            user_id: localData?.user_details?.id,
-            proposal_id: ProposalInfo?.id,
-            image: extractBase64FromDataURI(dataURL),
-            breakin_steps: 'images'
-          };
-          
-          const response = await submitImage(data);
-
-          if(response){
-            navigation("/ShowInspectionImages", {
-              state: {
-                capturedImagesWithOverlay: allCapturedImages,
-                proposalInfo: ProposalInfo,
-              },
-            });
-          }
-        } else {
+        const response = await submitImage(data);
+  
+        if (response) {
           if (currentImageIndex < images.length - 1) {
-            // Move to the next image if available
+            setCurrentImageIndex(currentImageIndex + 1);
             setCapturedImage(null);
             setIsModalOpen(true);
-            let data = {
-              break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
-              question_id: images[currentImageIndex]?.id,
-              user_id: localData?.user_details?.id,
-              proposal_id: ProposalInfo?.id,
-              image: extractBase64FromDataURI(dataURL),
-              breakin_steps: 'images'
-            };
-            
-            submitImage(data);
           } else {
-            // Navigate to the next screen if all images are captured
             navigation("/ShowInspectionImages", {
               state: {
                 capturedImagesWithOverlay: allCapturedImages,
@@ -229,15 +205,167 @@ const skipImage=()=>{
               },
             });
           }
-        }
+        } 
+        setIsLoading(false);
       };
       image.onerror = (error) => {
         console.error('Error loading image:', error);
+        setIsLoading(false);
       };
       image.src = capturedImage;
     };
     logo.src = Logo1;
   };
+  
+  
+
+  // const handleSavePhoto = async () => {
+  //   setIsLoading(true)
+  //   const canvas = canvasRef.current;
+  //   const ctx = canvas.getContext('2d');
+    
+  //   // Set canvas dimensions to match window size
+  //   canvas.width = window.innerWidth;
+  //   canvas.height = window.innerHeight;
+    
+  //   // Draw on the canvas
+  //   ctx.fillStyle = 'green';
+  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+  //   // Add blue footer bar
+  //   const footerHeight = 80; // Height of the footer bar
+  //   ctx.fillStyle = '#F1FBFF';
+  //   ctx.fillRect(0, canvas.height - footerHeight, canvas.width, footerHeight);
+    
+  //   // Draw footer text
+  //   const textFontSize = canvas.width * 0.03; // Set font size relative to canvas width
+  //   ctx.fillStyle = '#0E445A';
+  //   ctx.font = `${textFontSize}px Arial`; // Set dynamic font size
+  //   ctx.textAlign = 'left'; // Align text to the left
+  //   const currentDate = new Date();
+  //   const timeOptions = {
+  //     hour12: true, // Display time in 12-hour format
+  //     hour: 'numeric', // Display hours as digits
+  //     minute: '2-digit', // Display minutes as two digits
+  //     second: '2-digit', // Display seconds as two digits
+  //   };
+  //   const formattedTime = currentDate.toLocaleTimeString(undefined, timeOptions);
+  //   const formattedDate = currentDate.toLocaleDateString();
+  //   const formattedDateTime = `${formattedDate} ${formattedTime}`;
+  //   const textY = canvas.height - 20; // Y coordinate of the text
+  //   ctx.fillText(`Date / Time: ${formattedDateTime}`, 20, textY - 30); // Start from the left, adjusted for two lines
+  //   ctx.fillText(`Latitude / Longitude: ${latitude} / ${longitude}`, 20, textY); // Dynamic text
+    
+  //   // Load and draw footer logo
+  //   const logo = new Image();
+  //   logo.onload = () => {
+  //     // Calculate maximum logo dimensions relative to canvas size
+  //     const maxLogoWidth = canvas.width * 0.2; // Maximum 20% of canvas width
+  //     const maxLogoHeight = footerHeight * 0.8; // Maximum 80% of footer height
+      
+  //     // Adjust logo size to fit within the maximum dimensions
+  //     let logoWidth = logo.width;
+  //     let logoHeight = logo.height;
+  //     if (logoWidth > maxLogoWidth) {
+  //       logoHeight *= maxLogoWidth / logoWidth;
+  //       logoWidth = maxLogoWidth;
+  //     }
+  //     if (logoHeight > maxLogoHeight) {
+  //       logoWidth *= maxLogoHeight / logoHeight;
+  //       logoHeight = maxLogoHeight;
+  //     }
+      
+  //     // Calculate logo position relative to canvas dimensions
+  //     const logoX = canvas.width - logoWidth - 20; // X coordinate of the logo (20px from the right edge)
+  //     const logoY = canvas.height - footerHeight + (footerHeight - logoHeight) / 2; // Center vertically within footer
+      
+  //     // Draw the logo
+  //     ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
+      
+  //     // Load main image
+  //     const image = new Image();
+  //     image.onload = async () => {
+  //       // Draw the main image onto the canvas
+  //       ctx.drawImage(image, 0, 0, canvas.width, canvas.height - footerHeight);
+        
+  //       // Get data URL of the canvas
+  //       const dataURL = canvas.toDataURL('image/jpeg');
+  //       setCanvaImageData(dataURL);
+        
+  //       // Add dynamic overlay text
+  //       const overlayText = images[currentImageIndex]?.name;
+  //       const overlayTextid = images[currentImageIndex]?.id;
+        
+  //       // Set other properties for the image file
+  //       const fileName = `${images[currentImageIndex]?.name}.jpg`;
+  //       const fileData = {
+  //         uri: dataURL, // Use the canvas data URL
+  //         type: 'image/jpeg',
+  //         name: fileName,
+  //         part: overlayText,
+  //         image_id: overlayTextid,
+  //         date: new Date().toString(), // Store the current date
+  //         latitude: latitude, // Store latitude
+  //         longitude: longitude, // Store longitude
+  //       };
+        
+  //       // Add the captured image data to the list
+  //       setAllCapturedImages([...allCapturedImages, fileData]);
+        
+        
+  //       if(images.length === 1) {
+  //         let data = {
+  //           break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
+  //           question_id: images[currentImageIndex]?.id,
+  //           user_id: localData?.user_details?.id,
+  //           proposal_id: ProposalInfo?.id,
+  //           image: extractBase64FromDataURI(dataURL),
+  //           breakin_steps: 'images'
+  //         };
+          
+  //         const response = await submitImage(data);
+
+  //         if(response){
+  //           navigation("/ShowInspectionImages", {
+  //             state: {
+  //               capturedImagesWithOverlay: allCapturedImages,
+  //               proposalInfo: ProposalInfo,
+  //             },
+  //           });
+  //         }
+  //       } else {
+  //         if (currentImageIndex < images.length - 1) {
+  //           // Move to the next image if available
+  //           setCapturedImage(null);
+  //           setIsModalOpen(true);
+  //           let data = {
+  //             break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
+  //             question_id: images[currentImageIndex]?.id,
+  //             user_id: localData?.user_details?.id,
+  //             proposal_id: ProposalInfo?.id,
+  //             image: extractBase64FromDataURI(dataURL),
+  //             breakin_steps: 'images'
+  //           };
+            
+  //           submitImage(data);
+  //         } else {
+  //           // Navigate to the next screen if all images are captured
+  //           navigation("/ShowInspectionImages", {
+  //             state: {
+  //               capturedImagesWithOverlay: allCapturedImages,
+  //               proposalInfo: ProposalInfo,
+  //             },
+  //           });
+  //         }
+  //       }
+  //     };
+  //     image.onerror = (error) => {
+  //       console.error('Error loading image:', error);
+  //     };
+  //     image.src = capturedImage;
+  //   };
+  //   logo.src = Logo1;
+  // };
   
 
 const submitImage=async(data)=>{
