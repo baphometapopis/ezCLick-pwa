@@ -100,7 +100,6 @@ const PermissionPage = () => {
   }
 
   function redirectUser(data,showCheckpoint) {
-    console.log(ProposalInfo,data,'PPPP',showCheckpoint)
 
     if (data === 'checkpoint') {
       if(showCheckpoint==0){
@@ -162,7 +161,6 @@ const PermissionPage = () => {
         }
       }
 
-      console.log(ProposalInfoRES?.data,'asdasdasdasdasdsaas')
       if (ProposalInfoRES?.data?.breakin_status === 0) {
         redirectUser(ProposalInfoRES?.data?.breakin_steps,ProposalInfoRES?.data?.is_question_checkpoint);
       }
@@ -179,8 +177,10 @@ const PermissionPage = () => {
     <div className="container">
       <InspectionModalRules
         isVisible={IsInstructionModalVisible}
+        // isVisible={true}
         onClose={InstructioncloseModal}
         isVideo={true}
+        proposalData={ProposalInfo}
       />
       <Header checkLocal={true} /> {/* Include the Header component */}
 

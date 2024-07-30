@@ -43,13 +43,13 @@ const VideoPreview = () => {
   }
 
   const submitVideo = async () => {
-    setisLoading(true)
     // compressVideo()
     setIsSubmitting(true)
     if (!odometerReading) {
       setOdometerError(true); // Set odometer error if reading is not provided
       return; // Stop submission if odometer reading is missing
     }
+    setisLoading(true)
 
     const videopath = {
       uri: videoblob,

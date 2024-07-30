@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SampleImage, IconClose } from '../../Constant/ImageConstant';
-import { fetch_Image_inspection_question } from '../../Api/fetchQuestion';
+import { SampleImage, IconClose, BikeSample } from '../../Constant/ImageConstant';
 import  './InspectionModalRules.css'; // Import CSS file for styling
 import {  useNavigate } from 'react-router-dom';
 
@@ -9,7 +8,6 @@ const InspectionModalRules = ({ isVisible, onClose, proposalData, isVideo }) => 
   const [isCameraVisible, setCameraVisible] = useState(false);
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const navigate = useNavigate();
-
   const openCamera = async () => {
     onClose();
 
@@ -46,7 +44,7 @@ const InspectionModalRules = ({ isVisible, onClose, proposalData, isVideo }) => 
           <p className={"modalText centeredText"}>
             Follow these steps for the self-inspection process to be successful
           </p>
-          <img src={SampleImage} className={"InspectionRulesimage"} alt="Sample" />
+          <img src={proposalData?.v_product_type_id===2?BikeSample:SampleImage} className={"InspectionRulesimage"} alt="Sample" />
           <div className={"scrollContainer"}>
             <p className={"scrollIndicator"}>Scroll down for more details</p>
             {isVideo ? (

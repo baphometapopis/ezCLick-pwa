@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 // import { isInspectionImagesFolderEmpty } from "../Utils/checkLocalStoragefordata";
 import "./ProposalInfoPage.css"; // Import CSS module
-import { CallIcon, CarIcon, CustomerCare, IconClose, StartInspection, WhatsappIcon } from "../../Constant/ImageConstant";
+import { BikeIcon, CallIcon, CarIcon, CustomerCare, IconClose, StartInspection, WhatsappIcon } from "../../Constant/ImageConstant";
 import { fetchProposalDetails } from "../../Api/fetchProposalDetails";
 import { url } from "../../Api/ApiEndpoint";
 import { fetchLoginDataByProposalNoAPi } from "../../Api/fetchLoginDetailsByProposalNo";
@@ -165,9 +165,9 @@ setReferbackedPoints(referbackString)
       {isProposalexist ? (
         <div className={"optionCard"}>
           <div className={"rowlogo"}>
-            <img
+           <img
               className={"logoImage"}
-              src={CarIcon}
+              src={proposalInfo?.v_product_type_id==2?BikeIcon:CarIcon}
               alt="Proposal Logo"
             />
 

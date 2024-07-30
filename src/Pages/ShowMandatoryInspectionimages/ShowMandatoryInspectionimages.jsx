@@ -12,6 +12,8 @@ import InspectionModalRules from "../../Component/Modal/InspectionModalRules";
 import { getFullReport } from "../../Api/fetchReferBackInspection";
 import { encrypt } from "../../Utils/encryption";
 import FullPageLoader from "../../Component/FullPageLoader";
+import { makeApiCall } from "../../Api/makeApiCall";
+import { Api_Endpoints } from "../../Api/ApiEndpoint";
 
 const ShowinspectionImages = ({ route }) => {
   const [IsInstructionModalVisible,setIsInstructionModalVisible]=useState(false)
@@ -97,7 +99,7 @@ const ShowinspectionImages = ({ route }) => {
       break_in_case_id:reslocaldata?.proposal_data?.breakin_inspection_id
     }
     
-    let imageRes = await fetch_Image_inspection_question(data);
+    const imageRes = await makeApiCall(Api_Endpoints?.fetch_Image_inspection_question_Endpoint,'POST')
 
 
 
@@ -241,10 +243,7 @@ setIsLoading(false)
            
             questiondone.push(Number(questionData?.question_id));
             questiondoneImages.push(questionData?.part);
-            console.log(
-              questionData?.part,
-              'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
-            );
+           
             setcurrentQuestion(data?.question_id)
           } else {
           }

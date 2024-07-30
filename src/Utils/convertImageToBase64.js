@@ -1,5 +1,4 @@
 export const convertImageToBase64 = async (file) => {
-  console.log(file)
   try {
     // Create a FileReader object
     const reader = new FileReader();
