@@ -27,20 +27,18 @@
 }
 .camera-buttons {
   position: absolute;
-  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
 }
 .save-button-container {
   
   display: flex;
-
+flex-direction: column;
   position: absolute;
   bottom: 30px;
   left: 50%;
@@ -155,8 +153,6 @@
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    left: 30px;
-  bottom: 45%;
   }
 }
 .capture-button-container {

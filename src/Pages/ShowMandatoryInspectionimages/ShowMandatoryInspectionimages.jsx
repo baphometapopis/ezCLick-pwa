@@ -25,6 +25,7 @@ const ShowinspectionImages = ({ route }) => {
   const [FailedArray,setFailedArray]=useState('');
   const [FinalData,setFinalData]=useState('');
   const [localdata, setLocaldata] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
 
 
@@ -127,14 +128,14 @@ if(resproposalInfo?.data?.breakin_status===3){
 
       setLocaldata(reslocaldata)
       setProposalInfo(resproposalInfo)
-      setFinalData(filteredimage)
+      setFinalData(filteredimage);
+      console.log(filteredimage,'lkjhgfd')
     }
    setIsLoading(false)
 
   }
 
 
-  const [isLoading, setIsLoading] = useState(false);
 const navigate =useNavigate()
   const { state } = useLocation();
   // const { capturedImagesWithOverlay,proposalInfo } = state;
@@ -318,12 +319,21 @@ setIsLoading(false)
         {FinalData?.map((item, index) => (
           <div key={index} className="imageContainer">
           
-            <img
+            {/* <img
               className="image"
               src={item?.Inspection_Image}
               alt={item?.part}
               onClick={() => handleImagePress(item)}
-            />
+            /> */}
+
+
+<img
+  className="image"
+  src={`${item?.Inspection_Image}?updated_at=${item?.inspection_updated_at}`}
+  alt={item?.part}
+  onClick={() => handleImagePress(item)}
+/>
+
             <p className="overlayText">{item?.name}</p>
            
           
@@ -332,7 +342,7 @@ setIsLoading(false)
       </div>}
 
 
-      {
+   {FinalData&&<div>   {
                   true ? 
 
         <button onClick={goNext} >
@@ -348,7 +358,8 @@ setIsLoading(false)
       </button>
         
         }
-
+        </div>
+}
    
 
 <InspectionModalRules
@@ -358,14 +369,7 @@ setIsLoading(false)
         
       />
 
-      {/* {isLoading && (
-        <div className="loaderContainer">
-          <div className="loaderContainer1">
-          <div className="loader"></div>
-          <p className="loaderText">{`${CurrentQuestion}/${capturedImagesWithOverlay.length+1} Submitting Question`}</p>
-          </div>
-        </div>
-      )} */}
+     
       {selectedImage && (
         <div className="modalContainer">
           <div className="closeButton" onClick={handleModalClose}>
@@ -374,7 +378,9 @@ setIsLoading(false)
             <div className="previewImagecontainer">
           <img
             className="fullScreenImage"
-            src={selectedImage?.Inspection_Image}
+            // src={selectedImage?.Inspection_Image}
+            src={`${selectedImage?.Inspection_Image}?updated_at=${selectedImage?.inspection_updated_at}`}
+
             alt="Full Screen"
           />
            <button style={{backgroundColor:'orange',fontSize:'18px'}}  onClick={()=>    navigate('/camera',{replace:true,state:{path:'RetakeImage',data:[selectedImage]}})

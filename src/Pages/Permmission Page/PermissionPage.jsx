@@ -101,6 +101,8 @@ const PermissionPage = () => {
 
   function redirectUser(data,showCheckpoint) {
 
+    console.log(data,showCheckpoint,'lkjhgfdx')
+
     if (data === 'checkpoint') {
       if(showCheckpoint==0){
         setNextPath('camera');
@@ -192,14 +194,17 @@ const PermissionPage = () => {
         </ul>
         <div style={{display:'flex'}}>
         <button onClick={requestPermissions} type='submit'>Request Permissions</button>
-        {canStartInspection ? <button onClick={() => navigate(`/${nextPath}`, { replace: true })}>Start Inspection</button>:
+        {/* {true */}
+
+        {canStartInspection 
+        ? <button onClick={() => navigate(`/${nextPath}`, { replace: true })}>Start Inspection</button>:
         
         <button onClick={resetPermissions} type='button'>Manual Permission</button>
         
         }
         </div>
       </div>
-    </div>
+    </div> 
   );
 };
 

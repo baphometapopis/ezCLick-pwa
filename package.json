@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "crypto-js": "^4.2.0",
     "react": "^18.2.0",
+    "react-camera-pro": "^1.4.0",
     "react-dom": "^18.2.0",
     "react-easy-crop": "^5.0.7",
     "react-html5-camera-photo": "^1.5.11",

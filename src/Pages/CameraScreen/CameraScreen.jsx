@@ -30,10 +30,10 @@ const CameraScreen = () => {
   };
 
   const BackvideoConstraints = {
-    // facingMode: 'user', // This will use the front camera if available
+    facingMode: 'user', // This will use the front camera if available
 
 
-    facingMode: { exact: "environment" }, // This will use the back camera if available
+    // facingMode: { exact: "environment" }, // This will use the back camera if available
 
   };
   const [localData,setLocalData]=useState('')
@@ -80,6 +80,8 @@ const skipImage=()=>{
 
   const handleRetakePhoto = () => {
     setCapturedImage(null);
+    handleButtonClick()
+
   };
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -90,51 +92,184 @@ const skipImage=()=>{
   };
 
 
+  // const handleSavePhoto = async () => {
+  //   setIsLoading(true);
+  //   const canvas = canvasRef.current;
+  //   const ctx = canvas.getContext('2d');
+    
+  //   // Set canvas dimensions to match window size
+  //   canvas.width = window.innerWidth;
+  //   canvas.height = window.innerHeight;
+    
+  //   // Draw on the canvas
+  //   ctx.fillStyle = 'green';
+  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+  //   // Add blue footer bar
+  //   const footerHeight = 80; // Height of the footer bar
+  //   ctx.fillStyle = '#F1FBFF';
+  //   ctx.fillRect(0, canvas.height - footerHeight, canvas.width, footerHeight);
+    
+  //   // Draw footer text
+  //   const textFontSize = canvas.width * 0.03; // Set font size relative to canvas width
+  //   ctx.fillStyle = '#0E445A';
+  //   ctx.font = `${textFontSize}px Arial`; // Set dynamic font size
+  //   ctx.textAlign = 'left'; // Align text to the left
+  //   const currentDate = new Date();
+  //   const timeOptions = {
+  //     hour12: true, // Display time in 12-hour format
+  //     hour: 'numeric', // Display hours as digits
+  //     minute: '2-digit', // Display minutes as two digits
+  //     second: '2-digit', // Display seconds as two digits
+  //   };
+  //   const formattedTime = currentDate.toLocaleTimeString(undefined, timeOptions);
+  //   const formattedDate = currentDate.toLocaleDateString();
+  //   const formattedDateTime = `${formattedDate} ${formattedTime}`;
+  //   const textY = canvas.height - 20; // Y coordinate of the text
+  //   ctx.fillText(`Date / Time: ${formattedDateTime}`, 20, textY - 30); // Start from the left, adjusted for two lines
+  //   ctx.fillText(`Latitude / Longitude: ${latitude} / ${longitude}`, 20, textY); // Dynamic text
+    
+  //   // Load and draw footer logo
+  //   const logo = new Image();
+  //   logo.onload = () => {
+  //     // Calculate maximum logo dimensions relative to canvas size
+  //     const maxLogoWidth = canvas.width * 0.2; // Maximum 20% of canvas width
+  //     const maxLogoHeight = footerHeight * 0.8; // Maximum 80% of footer height
+      
+  //     // Adjust logo size to fit within the maximum dimensions
+  //     let logoWidth = logo.width;
+  //     let logoHeight = logo.height;
+  //     if (logoWidth > maxLogoWidth) {
+  //       logoHeight *= maxLogoWidth / logoWidth;
+  //       logoWidth = maxLogoWidth;
+  //     }
+  //     if (logoHeight > maxLogoHeight) {
+  //       logoWidth *= maxLogoHeight / logoHeight;
+  //       logoHeight = maxLogoHeight;
+  //     }
+      
+  //     // Calculate logo position relative to canvas dimensions
+  //     const logoX = canvas.width - logoWidth - 20; // X coordinate of the logo (20px from the right edge)
+  //     const logoY = canvas.height - footerHeight + (footerHeight - logoHeight) / 2; // Center vertically within footer
+      
+  //     // Draw the logo
+  //     ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
+      
+  //     // Load main image
+  //     const image = new Image();
+  //     image.onload = async () => {
+  //       // Draw the main image onto the canvas
+  //       ctx.drawImage(image, 0, 0, canvas.width, canvas.height - footerHeight);
+        
+  //       // Get data URL of the canvas
+  //       const dataURL = canvas.toDataURL('image/jpeg');
+  //       setCanvaImageData(dataURL);
+        
+  //       // Add dynamic overlay text
+  //       const overlayText = images[currentImageIndex]?.name;
+  //       const overlayTextid = images[currentImageIndex]?.id;
+        
+  //       // Set other properties for the image file
+  //       const fileName = `${images[currentImageIndex]?.name}.jpg`;
+  //       const fileData = {
+  //         uri: dataURL, // Use the canvas data URL
+  //         type: 'image/jpeg',
+  //         name: fileName,
+  //         part: overlayText,
+  //         image_id: overlayTextid,
+  //         date: new Date().toString(), // Store the current date
+  //         latitude: latitude, // Store latitude
+  //         longitude: longitude, // Store longitude
+  //       };
+        
+  //       // Add the captured image data to the list
+  //       setAllCapturedImages([...allCapturedImages, fileData]);
+        
+  //       let data = {
+  //         break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
+  //         question_id: images[currentImageIndex]?.id,
+  //         user_id: localData?.user_details?.id,
+  //         proposal_id: ProposalInfo?.id,
+  //         image: extractBase64FromDataURI(dataURL),
+  //         breakin_steps: 'images'
+  //       };
+        
+  //       const response = await submitImage(data);
+  
+  //       if (response) {
+  //         if (currentImageIndex < images.length - 1) {
+  //           setCurrentImageIndex(currentImageIndex + 1);
+  //           setCapturedImage(null);
+  //           setIsModalOpen(true);
+  //         } else {
+  //           navigation("/ShowInspectionImages", {
+  //             state: {
+  //               capturedImagesWithOverlay: allCapturedImages,
+  //               proposalInfo: ProposalInfo,
+  //             },
+  //           });
+  //         }
+  //       } 
+  //       setIsLoading(false);
+  //     };
+  //     image.onerror = (error) => {
+  //       console.error('Error loading image:', error);
+  //       setIsLoading(false);
+  //     };
+  //     image.src = capturedImage;
+  //   };
+  //   logo.src = Logo1;
+  // };
+
   const handleSavePhoto = async () => {
+    // setPreviewMode(false); // Hide preview mode
     setIsLoading(true);
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    
+ 
+    const fixedWidth = 1080;  // Example fixed width
+const fixedHeight = 860; // Example fixed height
+
+canvas.width = fixedWidth;
+canvas.height = fixedHeight;
     // Set canvas dimensions to match window size
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
-    // Draw on the canvas
-    ctx.fillStyle = 'green';
+    // canvas.width = window.innerHeight ;
+    // canvas.height = window.innerWidth * 1.4;
+ 
+    // Draw a green background
+    ctx.fillStyle = 'aqua';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+ 
     // Add blue footer bar
-    const footerHeight = 80; // Height of the footer bar
+    const footerHeight = 80;
     ctx.fillStyle = '#F1FBFF';
     ctx.fillRect(0, canvas.height - footerHeight, canvas.width, footerHeight);
-    
+ 
     // Draw footer text
-    const textFontSize = canvas.width * 0.03; // Set font size relative to canvas width
-    ctx.fillStyle = '#0E445A';
-    ctx.font = `${textFontSize}px Arial`; // Set dynamic font size
-    ctx.textAlign = 'left'; // Align text to the left
+    const textFontSize = canvas.width * 0.03;
+    ctx.fillStyle = 'red';
+    ctx.font = `${textFontSize}px Arial`;
+    ctx.textAlign = 'left';
     const currentDate = new Date();
     const timeOptions = {
-      hour12: true, // Display time in 12-hour format
-      hour: 'numeric', // Display hours as digits
-      minute: '2-digit', // Display minutes as two digits
-      second: '2-digit', // Display seconds as two digits
+      hour12: true,
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
     };
     const formattedTime = currentDate.toLocaleTimeString(undefined, timeOptions);
     const formattedDate = currentDate.toLocaleDateString();
     const formattedDateTime = `${formattedDate} ${formattedTime}`;
-    const textY = canvas.height - 20; // Y coordinate of the text
-    ctx.fillText(`Date / Time: ${formattedDateTime}`, 20, textY - 30); // Start from the left, adjusted for two lines
-    ctx.fillText(`Latitude / Longitude: ${latitude} / ${longitude}`, 20, textY); // Dynamic text
-    
+    const textY = canvas.height - 20;
+    ctx.fillText(`Date / Time: ${formattedDateTime}`, 20, textY - 30);
+    ctx.fillText(`Latitude / Longitude: ${latitude} / ${longitude}`, 20, textY);
+ 
     // Load and draw footer logo
     const logo = new Image();
     logo.onload = () => {
-      // Calculate maximum logo dimensions relative to canvas size
-      const maxLogoWidth = canvas.width * 0.2; // Maximum 20% of canvas width
-      const maxLogoHeight = footerHeight * 0.8; // Maximum 80% of footer height
-      
-      // Adjust logo size to fit within the maximum dimensions
+      const maxLogoWidth = canvas.width * 0.2;
+      const maxLogoHeight = footerHeight * 0.8;
+ 
       let logoWidth = logo.width;
       let logoHeight = logo.height;
       if (logoWidth > maxLogoWidth) {
@@ -145,44 +280,51 @@ const skipImage=()=>{
         logoWidth *= maxLogoHeight / logoHeight;
         logoHeight = maxLogoHeight;
       }
-      
-      // Calculate logo position relative to canvas dimensions
-      const logoX = canvas.width - logoWidth - 20; // X coordinate of the logo (20px from the right edge)
-      const logoY = canvas.height - footerHeight + (footerHeight - logoHeight) / 2; // Center vertically within footer
-      
-      // Draw the logo
+ 
+      const logoX = canvas.width - logoWidth - 20;
+      const logoY = canvas.height - footerHeight + (footerHeight - logoHeight) / 2;
       ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
-      
-      // Load main image
+ 
+      // Load and draw main image
       const image = new Image();
       image.onload = async () => {
-        // Draw the main image onto the canvas
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height - footerHeight);
+        // Adjust image size and rotation if needed
+       const imgWidth = 1080;
+        const imgHeight = 790;
+
+ 
+        const rotatedWidth = Math.max(imgWidth, imgHeight);
+        const rotatedHeight = Math.min(imgWidth, imgHeight);
+ 
+        // Rotate the image to landscape
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        // ctx.rotate(Math.PI / 12);
+        ctx.drawImage(image, -540, -440, imgWidth, imgHeight);
+ 
         
+        // Reset transformation matrix
+        ctx.rotate(-Math.PI / 2);
+        ctx.translate(-canvas.width / 2, -canvas.height / 2);
+ 
         // Get data URL of the canvas
         const dataURL = canvas.toDataURL('image/jpeg');
-        setCanvaImageData(dataURL);
-        
-        // Add dynamic overlay text
+ 
+        // Set other properties for the image file
         const overlayText = images[currentImageIndex]?.name;
         const overlayTextid = images[currentImageIndex]?.id;
-        
-        // Set other properties for the image file
         const fileName = `${images[currentImageIndex]?.name}.jpg`;
         const fileData = {
-          uri: dataURL, // Use the canvas data URL
+          uri: dataURL,
           type: 'image/jpeg',
           name: fileName,
           part: overlayText,
           image_id: overlayTextid,
-          date: new Date().toString(), // Store the current date
-          latitude: latitude, // Store latitude
-          longitude: longitude, // Store longitude
+          date: new Date().toString(),
+          latitude: latitude,
+          longitude: longitude,
         };
-        
-        // Add the captured image data to the list
         setAllCapturedImages([...allCapturedImages, fileData]);
-        
+ 
         let data = {
           break_in_case_id: localData?.proposal_data?.breakin_inspection_id,
           question_id: images[currentImageIndex]?.id,
@@ -191,9 +333,9 @@ const skipImage=()=>{
           image: extractBase64FromDataURI(dataURL),
           breakin_steps: 'images'
         };
-        
+ 
         const response = await submitImage(data);
-  
+ 
         if (response) {
           if (currentImageIndex < images.length - 1) {
             setCurrentImageIndex(currentImageIndex + 1);
@@ -207,7 +349,7 @@ const skipImage=()=>{
               },
             });
           }
-        } 
+        }
         setIsLoading(false);
       };
       image.onerror = (error) => {
@@ -454,7 +596,21 @@ const data ={
     }
  
  setIsLoading(false) };
+   const [photo, setPhoto] = useState(null);
+  const fileInputRef = useRef(null);
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhoto(reader.result);
+        setCapturedImage(reader.result)
+        setIsModalOpen(false)
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   useEffect(() => {
     // Get device ID
     const id = navigator.userAgent;
@@ -494,8 +650,12 @@ const data ={
     };
   }, []); // Empty dependency array ensures that effect only runs on mount and unmount
 
+    const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // Trigger file input click
+    }
+  };
   useEffect(() => {
-    // console.log(images,'IIIIIOOOOOOOOOOOOOOO')
   }, [isModalOpen, images,ProposalInfo,VideoConstraints,localData]);
 
   useEffect(()=>{
@@ -547,7 +707,10 @@ const data ={
               {"\u2022"} Click on Ok When Your are Ready
             </p>
             <div style={{display:'flex',flexDirection:'row',gap:10}}>
-            <div onClick={() => setIsModalOpen(false)} className="ok-button">
+            {/* <div onClick={() => setIsModalOpen(false)} className="ok-button"> */}
+            
+            <div onClick={handleButtonClick} className="ok-button">
+
               Start Camera
             </div>
           {images[currentImageIndex]?.is_mand==0 ?  <div onClick={skipImage} className="skip-button">
@@ -557,15 +720,23 @@ const data ={
           </div>
         </div>
       )}
+        <input
+            type="file"
+             accept="image/*"
+             capture="environment"
+             onChange={handleFileChange}
+             style={{ display: 'none' }} // Hide the file input
+             ref={fileInputRef}
+           />
       {!isModalOpen && !capturedImage && (
      <div style={{ position: 'relative' }}>
-     <Webcam
+     {/* <Webcam
        audio={false}
        ref={webcamRef}
        screenshotFormat="image/jpeg"
        height={windowSize.height}
        videoConstraints={VideoConstraints}
-     />
+     /> */}
      <img
        src={images[currentImageIndex]?.sample_image_url}
        alt="Overlay"
@@ -581,9 +752,9 @@ const data ={
        }}
      />
     
-     <div className="capture-button-container">
+     {/* <div className="capture-button-container">
        <div onClick={capture} className="capture-button"></div>
-     </div>
+     </div> */}
    </div>
    
       )}
@@ -609,4 +780,57 @@ const data ={
 };
 
 export default CameraScreen;
+// import React, { useRef, useState } from 'react';
 
+// const CameraComponent = () => {
+//   const [photo, setPhoto] = useState(null);
+//   const fileInputRef = useRef(null);
+
+//   const handleFileChange = (event) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onloadend = () => {
+//         setPhoto(reader.result);
+//       };
+//       reader.readAsDataURL(file);
+//     }
+//   };
+
+//   const handleButtonClick = () => {
+//     if (fileInputRef.current) {
+//       fileInputRef.current.click(); // Trigger file input click
+//     }
+//   };
+
+//   const retakePhoto = () => {
+//     setPhoto(null);
+//   };
+
+//   return (
+//     <div style={{ textAlign: 'center', marginTop: '20px' }}>
+//       {photo ? (
+//         <div>
+//           <img src={photo} alt="Captured" style={{ maxWidth: '100%', maxHeight: '500px' }} />
+//           <button onClick={retakePhoto}>Retake</button>
+//         </div>
+//       ) : (
+//         <div>
+//           <button onClick={handleButtonClick} style={{ display: 'block', margin: 'auto' }}>
+//             Open Camera
+//           </button>
+//           <input
+//             type="file"
+//             accept="image/*"
+//             capture="environment"
+//             onChange={handleFileChange}
+//             style={{ display: 'none' }} // Hide the file input
+//             ref={fileInputRef}
+//           />
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default CameraComponent;

@@ -84,9 +84,11 @@
   }
   
   .captured-image {
-    width: 100vw;
-    height: 100vh;
-    /* object-fit: contain; */
+    width: 100%;
+    /* height: 100%; */
+    object-fit: contain;
+    transform: rotate(90deg);
+
   }
   
   .camera-button div {
@@ -161,16 +163,14 @@
       display: flex;
   
       position: absolute;
-  
+      flex-direction: row;
       transform: translate(-50%, -50%) rotate(90deg); /* Rotate 90 degrees for landscape */
-
+      gap:10px;
       color: white;
       border: none;
-      padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
       left: 30px;
-    bottom: 45%;
     }
   }
   .capture-button-container {
