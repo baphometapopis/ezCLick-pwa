@@ -8,10 +8,12 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchProposalDetails } from '../../Api/fetchProposalDetails';
 import InspectionModalRules from '../../Component/Modal/InspectionModalRules';
+import FullPageLoader from "../../Component/FullPageLoader";
 
 const PermissionPage = () => {
   const navigate = useNavigate();
   const [IsInstructionModalVisible, setIsInstructionModalVisible] = useState(false);
+  const [isLoading,setIsLoading]=useState(false)
 
   const [isMobile, setIsMobile] = useState(false);
   const [cameraPermission, setCameraPermission] = useState(null);
@@ -99,26 +101,64 @@ const PermissionPage = () => {
     }
   }
 
-  function redirectUser(data,showCheckpoint) {
+  // function redirectUser(data,showCheckpoint) {
 
-    console.log(data,showCheckpoint,'lkjhgfdx')
+  //   console.log(data,showCheckpoint,'lkjhgfdx')
 
-    if (data === 'checkpoint') {
-      if(showCheckpoint==0){
-        setNextPath('camera');
-        }else{
+  //   if (data === 'checkpoint') {
+  //     if(showCheckpoint==0){
+  //       setNextPath('camera');
+  //       }else{
 
+  //         setNextPath('InspectionCheckpoint');
+
+  //     }
+  //   } else if (data === 'images') {
+  //     setNextPath('camera');
+  //   } else if (data === 'video') {
+  //     setNextPath('videoRecord');
+  //   } else {
+  //     return "No referback points available";
+  //   }
+  // }
+
+  function redirectUser(data, showCheckpoint) {
+    console.log("Input Data:", data);
+    console.log("Input showCheckpoint:", showCheckpoint);
+    console.log("Starting redirection process...");
+  
+    setTimeout(() => {
+      console.log("Timeout executed. Checking conditions...");
+  
+      if (data === 'checkpoint') {
+        console.log("Data is 'checkpoint'. Evaluating showCheckpoint...");
+        if (showCheckpoint == 0) {
+          console.log("showCheckpoint is 0. Redirecting to 'camera'.");
+          setNextPath('camera');
+          navigate('/camera', { replace: true });
+        } else {
+          console.log("showCheckpoint is not 0. Redirecting to 'InspectionCheckpoint'.");
           setNextPath('InspectionCheckpoint');
-
+          navigate('/InspectionCheckpoint', { replace: true });
+        }
+      } else if (data === 'images') {
+        console.log("Data is 'images'. Redirecting to 'camera'.");
+        setNextPath('camera');
+        navigate('/camera', { replace: true });
+      } else if (data === 'video') {
+        console.log("Data is 'video'. Redirecting to 'videoRecord'.");
+        setNextPath('videoRecord');
+        navigate('/videoRecord', { replace: true });
+      } else {
+        console.log("No matching condition found. Returning default message.");
+        return "No referback points available";
       }
-    } else if (data === 'images') {
-      setNextPath('camera');
-    } else if (data === 'video') {
-      setNextPath('videoRecord');
-    } else {
-      return "No referback points available";
-    }
+  
+      console.log("Redirection process completed.");
+    }, 100); // Adjust timeout as needed
   }
+  
+  
 
   const getLocalData = async () => {
     const reslocaldata = await fetchDataLocalStorage('Claim_loginDetails');
@@ -173,10 +213,17 @@ const PermissionPage = () => {
     getLocalData();
   }, []);
 
-  useEffect(() => { }, [nextPath]);
-
+  useEffect(() => {
+    if (nextPath) {
+      console.log(`Navigating to: /${nextPath}`);
+      navigate(`/${nextPath}`, { replace: true });
+    }
+  }, [nextPath]);
+  
   return (
     <div className="container">
+      <FullPageLoader loading={isLoading}/>
+
       <InspectionModalRules
         isVisible={IsInstructionModalVisible}
         // isVisible={true}
