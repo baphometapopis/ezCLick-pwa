@@ -1,8 +1,11 @@
 
-// export const url = process.env.REACT_APP_API_URL_LIVE; // Switch based on environment
-// export const url = process.env.REACT_APP_API_URL_DEMO; // Switch based on environment
+export const url = process.env.REACT_APP_API_URL_LIVE; // Switch based on environment
+// export const url = import.meta.env.VITE_API_URL_LOCAL; // Switch based on environment
+// export const url = import.meta.env.VITE_APP_API_DEMO; // Switch based on environment
 
-export const url = '/api/';
+
+
+// export const url = '/api/';
 
 // /api/* https://breakin.ezclicktech.com/api/:splat 200
 // /api/* https://demo.ezclicktech.com/Ezclick/api/:splat 200
@@ -27,4 +30,6 @@ export const Api_Endpoints = {
   upload_signature_endpoint:`${url}api/uploadCustomerSignature`,
   sendOTP:`${url}api/SendOtpCustomer`,
   VerifyOTP:`${url}api/VerifyOtp`,
+  getAllInspectionImages:`${url}api/get_images_link`,
+
 };
